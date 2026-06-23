@@ -93,21 +93,20 @@ export default function CharactersPage() {
     }));
 
   const addInventoryItem = (itemId: string) => {
-    if (form.inventory.some((e) => e.itemId === itemId)) return;
     setForm((f) => ({
       ...f,
-      inventory: [...f.inventory, { itemId, quantity: 1, equipped: false }],
+      inventory: [...f.inventory, { instanceId: crypto.randomUUID(), itemId, equipped: false }],
     }));
   };
 
-  const updateInventoryEntry = (itemId: string, field: keyof InventoryEntry, value: unknown) =>
+  const updateInventoryEntry = (instanceId: string, field: keyof InventoryEntry, value: unknown) =>
     setForm((f) => ({
       ...f,
-      inventory: f.inventory.map((e) => (e.itemId === itemId ? { ...e, [field]: value } : e)),
+      inventory: f.inventory.map((e) => (e.instanceId === instanceId ? { ...e, [field]: value } : e)),
     }));
 
-  const removeInventoryItem = (itemId: string) =>
-    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.itemId !== itemId) }));
+  const removeInventoryItem = (instanceId: string) =>
+    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.instanceId !== instanceId) }));
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'identity', label: 'Identité' },
@@ -385,7 +384,7 @@ export default function CharactersPage() {
               label="Ajouter un objet"
               value=""
               placeholder="— Sélectionner un objet —"
-              options={items.filter((it) => !form.inventory.some((e) => e.itemId === it.id)).map((it) => ({ value: it.id, label: it.name }))}
+              options={items.map((it) => ({ value: it.id, label: it.name }))}
               onChange={(e) => e.target.value && addInventoryItem(e.target.value)}
             />
             {/* Inventory list */}
@@ -396,31 +395,31 @@ export default function CharactersPage() {
                 {form.inventory.map((entry) => {
                   const item = items.find((it) => it.id === entry.itemId);
                   if (!item) return null;
+                  const sameItemCount = form.inventory.filter((e) => e.itemId === item.id);
+                  const instanceLabel = sameItemCount.length > 1
+                    ? ` #${sameItemCount.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
+                    : '';
                   return (
-                    <div key={entry.itemId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
+                    <div key={entry.instanceId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-200">{item.name}</p>
+                        <p className="text-sm font-medium text-slate-200">
+                          {item.name}
+                          {instanceLabel && <span className="text-slate-500 font-normal">{instanceLabel}</span>}
+                        </p>
                         <p className="text-xs text-slate-500">{item.type} · {item.slot}</p>
                       </div>
-                      <input
-                        type="number"
-                        min={1}
-                        value={entry.quantity}
-                        onChange={(e) => updateInventoryEntry(entry.itemId, 'quantity', parseInt(e.target.value) || 1)}
-                        className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500 text-center"
-                      />
                       {item.equippable && (
                         <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={entry.equipped}
-                            onChange={(e) => updateInventoryEntry(entry.itemId, 'equipped', e.target.checked)}
+                            onChange={(e) => updateInventoryEntry(entry.instanceId, 'equipped', e.target.checked)}
                             className="accent-violet-500"
                           />
                           Équipé
                         </label>
                       )}
-                      <button onClick={() => removeInventoryItem(entry.itemId)} className="text-slate-600 hover:text-red-400 transition-colors">
+                      <button onClick={() => removeInventoryItem(entry.instanceId)} className="text-slate-600 hover:text-red-400 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
