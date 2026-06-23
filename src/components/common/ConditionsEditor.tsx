@@ -11,7 +11,7 @@ interface ConditionsEditorProps {
 
 export default function ConditionsEditor({ conditions, onChange }: ConditionsEditorProps) {
   const add = () =>
-    onChange([...conditions, { id: uuidv4(), label: '', description: '' }]);
+    onChange([...conditions, { id: uuidv4(), forumla: '' }]);
 
   const update = (id: string, field: keyof Omit<Condition, 'id'>, value: string) =>
     onChange(conditions.map((c) => (c.id === id ? { ...c, [field]: value } : c)));
@@ -25,18 +25,12 @@ export default function ConditionsEditor({ conditions, onChange }: ConditionsEdi
       )}
       {conditions.map((cond) => (
         <div key={cond.id} className="flex gap-2 items-start bg-[#1a1d28] border border-[#2a2d3a] rounded-lg p-3">
-          <div className="flex-1 grid grid-cols-2 gap-2">
+          <div className="flex-1 grid grid-cols-1 gap-2">
             <FormField
-              label="Nom"
-              value={cond.label}
-              onChange={(e) => update(cond.id, 'label', e.target.value)}
-              placeholder="ex: Blessé"
-            />
-            <FormField
-              label="Description"
-              value={cond.description}
-              onChange={(e) => update(cond.id, 'description', e.target.value)}
-              placeholder="ex: -2 en Agilité"
+              label="Formule"
+              value={cond.forumla}
+              onChange={(e) => update(cond.id, 'forumla', e.target.value)}
+              placeholder="ex: Character_Stat < Character_StatMax * 0.5"
             />
           </div>
           <button

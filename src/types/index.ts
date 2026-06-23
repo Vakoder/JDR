@@ -33,8 +33,7 @@ export interface StatModifier {
 
 export interface Condition {
   id: string;
-  label: string;
-  description: string;
+  forumla: string;
 }
 
 // ─── Race ────────────────────────────────────────────────────────────────────
