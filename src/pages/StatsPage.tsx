@@ -89,6 +89,7 @@ export default function StatsPage() {
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nom</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Abrév.</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Défaut</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Max</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
                   <th className="px-5 py-3" />
                 </tr>
@@ -106,6 +107,7 @@ export default function StatsPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3 text-slate-400">{stat.defaultValue}</td>
+                    <td className="px-5 py-3 text-slate-400">{stat.maxValue ?? '—'}</td>
                     <td className="px-5 py-3 text-slate-500 max-w-xs truncate">{stat.description || '—'}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
@@ -176,12 +178,34 @@ export default function StatsPage() {
             onChange={(e) => setField('description', e.target.value)}
             rows={2}
           />
-          <FormField
-            label="Valeur par défaut"
-            type="number"
-            value={form.defaultValue}
-            onChange={(e) => setField('defaultValue', Number(e.target.value))}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              label="Valeur par défaut"
+              type="number"
+              value={form.defaultValue}
+              onChange={(e) => setField('defaultValue', Number(e.target.value))}
+            />
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-slate-400">Valeur max</label>
+              <div className="flex items-center gap-2 h-[38px]">
+                <input
+                  type="checkbox"
+                  id="hasMax"
+                  checked={form.maxValue !== undefined}
+                  onChange={(e) => setField('maxValue', e.target.checked ? 100 : undefined)}
+                  className="w-4 h-4 accent-violet-500 cursor-pointer"
+                />
+                {form.maxValue !== undefined && (
+                  <input
+                    type="number"
+                    value={form.maxValue}
+                    onChange={(e) => setField('maxValue', Number(e.target.value))}
+                    className="flex-1 px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-[#2a2d3a] mt-2">
             <Button variant="secondary" onClick={() => setModalOpen(false)}>Annuler</Button>
             <Button variant="primary" onClick={handleSave} disabled={!form.name.trim()}>

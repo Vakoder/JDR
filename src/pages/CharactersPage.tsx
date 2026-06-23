@@ -19,6 +19,7 @@ const emptyForm = (): Omit<Character, 'id'> => ({
   raceId: null,
   classId: null,
   stats: {},
+  statsMax: {},
   skillIds: [],
   inventory: [],
   description: '',
@@ -79,6 +80,9 @@ export default function CharactersPage() {
 
   const setStat = (statId: string, value: number) =>
     setForm((f) => ({ ...f, stats: { ...f.stats, [statId]: value } }));
+
+  const setStatMax = (statId: string, value: number) =>
+    setForm((f) => ({ ...f, statsMax: { ...f.statsMax, [statId]: value } }));
 
   const toggleSkill = (skillId: string) =>
     setForm((f) => ({
@@ -310,12 +314,30 @@ export default function CharactersPage() {
                       {stat.name}
                       <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
                     </label>
-                    <input
-                      type="number"
-                      value={form.stats[stat.id] ?? stat.defaultValue}
-                      onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                      className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
-                    />
+                    {stat.maxValue !== undefined ? (
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          value={form.stats[stat.id] ?? stat.defaultValue}
+                          onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                        />
+                        <span className="text-slate-600 text-sm">/</span>
+                        <input
+                          type="number"
+                          value={form.statsMax[stat.id] ?? stat.maxValue}
+                          onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-violet-500/50"
+                        />
+                      </div>
+                    ) : (
+                      <input
+                        type="number"
+                        value={form.stats[stat.id] ?? stat.defaultValue}
+                        onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                      />
+                    )}
                   </div>
                 ))}
               </div>

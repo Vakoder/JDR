@@ -21,6 +21,7 @@ export interface Stat {
   abbreviation: string;
   description: string;
   defaultValue: number;
+  maxValue?: number;
 }
 
 export interface StatModifier {
@@ -121,6 +122,7 @@ export interface Character {
   raceId: string | null;
   classId: string | null;
   stats: Record<string, number>;
+  statsMax: Record<string, number>;
   skillIds: string[];
   inventory: InventoryEntry[];
   description: string;
