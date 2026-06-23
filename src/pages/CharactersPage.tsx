@@ -12,6 +12,7 @@ import SelectField from '../components/common/SelectField';
 import SearchBar from '../components/common/SearchBar';
 import EmptyState from '../components/common/EmptyState';
 import Badge from '../components/common/Badge';
+import evaluateConditions from '../services/conditionService.ts';
 
 const emptyForm = (): Omit<Character, 'id'> => ({
   name: '',
@@ -115,6 +116,14 @@ export default function CharactersPage() {
   const getRaceName = (id: string | null) => races.find((r) => r.id === id)?.name ?? '—';
   const getClassName = (id: string | null) => classes.find((c) => c.id === id)?.name ?? '—';
 
+  const currentCharacter: Character = {
+    ...(editing ?? {
+      id: 'temp',
+      type: 'PC',
+    }),
+    ...form,
+  };
+
   return (
     <div className="flex flex-col min-h-full">
       <Header title="Personnages" subtitle="Gérez vos PJ et PNJ" />
@@ -140,11 +149,10 @@ export default function CharactersPage() {
                 <button
                   key={type}
                   onClick={() => setFilterType(type)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                    filterType === type
-                      ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
-                      : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${filterType === type
+                    ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
+                    : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
+                    }`}
                 >
                   {type === 'ALL' ? 'Tous' : type === 'PC' ? 'PJ' : 'PNJ'}
                 </button>
@@ -233,11 +241,10 @@ export default function CharactersPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 text-sm rounded-md transition-colors ${
-                activeTab === tab.key
-                  ? 'bg-violet-600 text-white font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key
+                ? 'bg-violet-600 text-white font-medium'
+                : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               {tab.label}
             </button>
@@ -267,14 +274,38 @@ export default function CharactersPage() {
                 label="Race"
                 value={form.raceId ?? ''}
                 placeholder="— Aucune race —"
-                options={races.map((r) => ({ value: r.id, label: r.name }))}
+                options={races.map(
+                  (r) => {
+                    const usable =
+                      r.conditions.length === 0 ||
+                      evaluateConditions(
+                        r.conditions,
+                        currentCharacter,
+                        r,
+                        ruleSet
+                      );
+                    return ({ value: r.id, label: r.name + (usable ? " ✓" : " ✗") });
+                  }
+                )}
                 onChange={(e) => setField('raceId', e.target.value || null)}
               />
               <SelectField
                 label="Classe"
                 value={form.classId ?? ''}
                 placeholder="— Aucune classe —"
-                options={classes.map((c) => ({ value: c.id, label: c.name }))}
+                options={classes.map(
+                  (c) => {
+                    const usable =
+                      c.conditions.length === 0 ||
+                      evaluateConditions(
+                        c.conditions,
+                        currentCharacter,
+                        c,
+                        ruleSet
+                      );
+                    return ({ value: c.id, label: c.name + (usable ? " ✓" : " ✗") });
+                  }
+                )}
                 onChange={(e) => setField('classId', e.target.value || null)}
               />
             </div>
@@ -334,6 +365,14 @@ export default function CharactersPage() {
             ) : (
               skills.map((skill) => {
                 const linkedStat = stats.find((s) => s.id === skill.linkedStatId);
+                const usable =
+                  skill.conditions.length === 0 ||
+                  evaluateConditions(
+                    skill.conditions,
+                    currentCharacter,
+                    skill,
+                    ruleSet
+                  );
                 return (
                   <label
                     key={skill.id}
@@ -349,6 +388,12 @@ export default function CharactersPage() {
                       <p className="text-sm font-medium text-slate-200">{skill.name}</p>
                       <p className="text-xs text-slate-500">
                         {linkedStat ? `Lié à ${linkedStat.name}` : 'Aucune stat'} · {skill.cost} {skill.costType === 'CUSTOM' ? skill.costTypeCustomName : skill.costType}
+                      </p>
+                      <p
+                        className={`text-xs mt-1 ${usable ? 'text-green-400' : 'text-red-400'
+                          }`}
+                      >
+                        {usable ? '✓ Utilisable' : '✗ Conditions non remplies'}
                       </p>
                     </div>
                   </label>
@@ -377,6 +422,16 @@ export default function CharactersPage() {
                 {form.inventory.map((entry) => {
                   const item = items.find((it) => it.id === entry.itemId);
                   if (!item) return null;
+
+                  const usable =
+                    item.conditions.length === 0 ||
+                    evaluateConditions(
+                      item.conditions,
+                      currentCharacter,
+                      item,
+                      ruleSet
+                    );
+
                   return (
                     <div key={entry.itemId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
                       <div className="flex-1">
@@ -399,6 +454,12 @@ export default function CharactersPage() {
                             className="accent-violet-500"
                           />
                           Équipé
+                          <p
+                            className={`text-xs mt-1 ${usable ? 'text-green-400' : 'text-red-400'
+                              }`}
+                          >
+                            {usable ? '✓ Utilisable' : '✗ Conditions non remplies'}
+                          </p>
                         </label>
                       )}
                       <button onClick={() => removeInventoryItem(entry.itemId)} className="text-slate-600 hover:text-red-400 transition-colors">
