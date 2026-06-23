@@ -57,8 +57,8 @@ export function exportToPDF(ruleSet: RuleSet): void {
     y = addSection(doc, 'Statistiques', y);
     autoTable(doc, {
       startY: y,
-      head: [['Nom', 'Abrév.', 'Min', 'Max', 'Défaut', 'Description']],
-      body: ruleSet.stats.map((s) => [s.name, s.abbreviation, s.minValue, s.maxValue, s.defaultValue, s.description || '—']),
+      head: [['Nom', 'Abrév.', 'Défaut', 'Description']],
+      body: ruleSet.stats.map((s) => [s.name, s.abbreviation, s.defaultValue, s.description || '—']),
       theme: 'grid',
       headStyles: { fillColor: ACCENT, textColor: [255, 255, 255], fontSize: 9 },
       bodyStyles: { fontSize: 9, textColor: [30, 30, 30] },
@@ -274,7 +274,6 @@ export function exportToPDF(ruleSet: RuleSet): void {
     doc.line(x + 12, yPos, x + 40, yPos);
     doc.setTextColor(...TEXT_LIGHT);
     doc.setFontSize(7);
-    doc.text(`(${stat.minValue}–${stat.maxValue})`, x + 12, yPos - 3);
     doc.setFontSize(9);
   });
   py += Math.ceil(ruleSet.stats.length / cols) * 12 + 8;

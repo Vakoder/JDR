@@ -20,6 +20,7 @@ const emptyForm = (): Omit<Character, 'id'> => ({
   raceId: null,
   classId: null,
   stats: {},
+  statsMax: {},
   skillIds: [],
   inventory: [],
   description: '',
@@ -81,6 +82,9 @@ export default function CharactersPage() {
   const setStat = (statId: string, value: number) =>
     setForm((f) => ({ ...f, stats: { ...f.stats, [statId]: value } }));
 
+  const setStatMax = (statId: string, value: number) =>
+    setForm((f) => ({ ...f, statsMax: { ...f.statsMax, [statId]: value } }));
+
   const toggleSkill = (skillId: string) =>
     setForm((f) => ({
       ...f,
@@ -90,21 +94,20 @@ export default function CharactersPage() {
     }));
 
   const addInventoryItem = (itemId: string) => {
-    if (form.inventory.some((e) => e.itemId === itemId)) return;
     setForm((f) => ({
       ...f,
-      inventory: [...f.inventory, { itemId, quantity: 1, equipped: false }],
+      inventory: [...f.inventory, { instanceId: crypto.randomUUID(), itemId, equipped: false }],
     }));
   };
 
-  const updateInventoryEntry = (itemId: string, field: keyof InventoryEntry, value: unknown) =>
+  const updateInventoryEntry = (instanceId: string, field: keyof InventoryEntry, value: unknown) =>
     setForm((f) => ({
       ...f,
-      inventory: f.inventory.map((e) => (e.itemId === itemId ? { ...e, [field]: value } : e)),
+      inventory: f.inventory.map((e) => (e.instanceId === instanceId ? { ...e, [field]: value } : e)),
     }));
 
-  const removeInventoryItem = (itemId: string) =>
-    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.itemId !== itemId) }));
+  const removeInventoryItem = (instanceId: string) =>
+    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.instanceId !== instanceId) }));
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'identity', label: 'Identité' },
@@ -341,15 +344,30 @@ export default function CharactersPage() {
                       {stat.name}
                       <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
                     </label>
-                    <input
-                      type="number"
-                      min={stat.minValue}
-                      max={stat.maxValue}
-                      value={form.stats[stat.id] ?? stat.defaultValue}
-                      onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                      className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
-                    />
-                    <p className="text-xs text-slate-600 mt-1">{stat.minValue} – {stat.maxValue}</p>
+                    {stat.maxValue !== undefined ? (
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          value={form.stats[stat.id] ?? stat.defaultValue}
+                          onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                        />
+                        <span className="text-slate-600 text-sm">/</span>
+                        <input
+                          type="number"
+                          value={form.statsMax[stat.id] ?? stat.maxValue}
+                          onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-violet-500/50"
+                        />
+                      </div>
+                    ) : (
+                      <input
+                        type="number"
+                        value={form.stats[stat.id] ?? stat.defaultValue}
+                        onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                      />
+                    )}
                   </div>
                 ))}
               </div>
@@ -411,7 +429,7 @@ export default function CharactersPage() {
               label="Ajouter un objet"
               value=""
               placeholder="— Sélectionner un objet —"
-              options={items.filter((it) => !form.inventory.some((e) => e.itemId === it.id)).map((it) => ({ value: it.id, label: it.name }))}
+              options={items.map((it) => ({ value: it.id, label: it.name }))}
               onChange={(e) => e.target.value && addInventoryItem(e.target.value)}
             />
             {/* Inventory list */}
@@ -432,25 +450,25 @@ export default function CharactersPage() {
                       ruleSet
                     );
 
+                  const sameItemCount = form.inventory.filter((e) => e.itemId === item.id);
+                  const instanceLabel = sameItemCount.length > 1
+                    ? ` #${sameItemCount.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
+                    : '';
                   return (
-                    <div key={entry.itemId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
+                    <div key={entry.instanceId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-200">{item.name}</p>
+                        <p className="text-sm font-medium text-slate-200">
+                          {item.name}
+                          {instanceLabel && <span className="text-slate-500 font-normal">{instanceLabel}</span>}
+                        </p>
                         <p className="text-xs text-slate-500">{item.type} · {item.slot}</p>
                       </div>
-                      <input
-                        type="number"
-                        min={1}
-                        value={entry.quantity}
-                        onChange={(e) => updateInventoryEntry(entry.itemId, 'quantity', parseInt(e.target.value) || 1)}
-                        className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500 text-center"
-                      />
                       {item.equippable && (
                         <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={entry.equipped}
-                            onChange={(e) => updateInventoryEntry(entry.itemId, 'equipped', e.target.checked)}
+                            onChange={(e) => updateInventoryEntry(entry.instanceId, 'equipped', e.target.checked)}
                             className="accent-violet-500"
                           />
                           Équipé
@@ -462,7 +480,7 @@ export default function CharactersPage() {
                           </p>
                         </label>
                       )}
-                      <button onClick={() => removeInventoryItem(entry.itemId)} className="text-slate-600 hover:text-red-400 transition-colors">
+                      <button onClick={() => removeInventoryItem(entry.instanceId)} className="text-slate-600 hover:text-red-400 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>

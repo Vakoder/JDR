@@ -20,9 +20,8 @@ export interface Stat {
   name: string;
   abbreviation: string;
   description: string;
-  minValue: number;
-  maxValue: number;
   defaultValue: number;
+  maxValue?: number;
 }
 
 export interface StatModifier {
@@ -110,8 +109,8 @@ export interface Item {
 export type CharacterType = 'PC' | 'NPC';
 
 export interface InventoryEntry {
+  instanceId: string;
   itemId: string;
-  quantity: number;
   equipped: boolean;
 }
 
@@ -122,6 +121,7 @@ export interface Character {
   raceId: string | null;
   classId: string | null;
   stats: Record<string, number>;
+  statsMax: Record<string, number>;
   skillIds: string[];
   inventory: InventoryEntry[];
   description: string;
