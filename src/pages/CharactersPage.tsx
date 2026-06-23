@@ -312,13 +312,10 @@ export default function CharactersPage() {
                     </label>
                     <input
                       type="number"
-                      min={stat.minValue}
-                      max={stat.maxValue}
                       value={form.stats[stat.id] ?? stat.defaultValue}
                       onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
                       className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
                     />
-                    <p className="text-xs text-slate-600 mt-1">{stat.minValue} – {stat.maxValue}</p>
                   </div>
                 ))}
               </div>

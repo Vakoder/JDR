@@ -20,8 +20,6 @@ export interface Stat {
   name: string;
   abbreviation: string;
   description: string;
-  minValue: number;
-  maxValue: number;
   defaultValue: number;
 }
 

@@ -15,8 +15,6 @@ const emptyForm = (): Omit<Stat, 'id'> => ({
   name: '',
   abbreviation: '',
   description: '',
-  minValue: 1,
-  maxValue: 20,
   defaultValue: 10,
 });
 
@@ -44,7 +42,7 @@ export default function StatsPage() {
 
   const openEdit = (stat: Stat) => {
     setEditing(stat);
-    setForm({ name: stat.name, abbreviation: stat.abbreviation, description: stat.description, minValue: stat.minValue, maxValue: stat.maxValue, defaultValue: stat.defaultValue });
+    setForm({ name: stat.name, abbreviation: stat.abbreviation, description: stat.description, defaultValue: stat.defaultValue });
     setModalOpen(true);
   };
 
@@ -90,7 +88,6 @@ export default function StatsPage() {
                 <tr className="border-b border-[#2a2d3a]">
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nom</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Abrév.</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Plage</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Défaut</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
                   <th className="px-5 py-3" />
@@ -107,9 +104,6 @@ export default function StatsPage() {
                       <span className="px-2 py-0.5 bg-violet-600/20 text-violet-300 rounded text-xs font-mono font-bold">
                         {stat.abbreviation}
                       </span>
-                    </td>
-                    <td className="px-5 py-3 text-slate-400">
-                      {stat.minValue} – {stat.maxValue}
                     </td>
                     <td className="px-5 py-3 text-slate-400">{stat.defaultValue}</td>
                     <td className="px-5 py-3 text-slate-500 max-w-xs truncate">{stat.description || '—'}</td>
@@ -182,26 +176,12 @@ export default function StatsPage() {
             onChange={(e) => setField('description', e.target.value)}
             rows={2}
           />
-          <div className="grid grid-cols-3 gap-4">
-            <FormField
-              label="Valeur minimale"
-              type="number"
-              value={form.minValue}
-              onChange={(e) => setField('minValue', Number(e.target.value))}
-            />
-            <FormField
-              label="Valeur maximale"
-              type="number"
-              value={form.maxValue}
-              onChange={(e) => setField('maxValue', Number(e.target.value))}
-            />
-            <FormField
-              label="Valeur par défaut"
-              type="number"
-              value={form.defaultValue}
-              onChange={(e) => setField('defaultValue', Number(e.target.value))}
-            />
-          </div>
+          <FormField
+            label="Valeur par défaut"
+            type="number"
+            value={form.defaultValue}
+            onChange={(e) => setField('defaultValue', Number(e.target.value))}
+          />
           <div className="flex justify-end gap-3 pt-2 border-t border-[#2a2d3a] mt-2">
             <Button variant="secondary" onClick={() => setModalOpen(false)}>Annuler</Button>
             <Button variant="primary" onClick={handleSave} disabled={!form.name.trim()}>
