@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plus, Pencil, Trash2, Shield } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { Race } from '../types';
@@ -87,15 +87,15 @@ export default function RacesPage() {
                     <h3 className="font-semibold text-white">{race.name}</h3>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(race)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors">
+                    <button onClick={() => openEdit(race)} className="text-slate-400 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors">
                       <Pencil size={14} />
                     </button>
-                    <button onClick={() => setDeleteTarget(race)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors">
+                    <button onClick={() => setDeleteTarget(race)} className="text-slate-400 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors">
                       <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
-                {race.description && <p className="text-xs text-slate-500 line-clamp-2">{race.description}</p>}
+                {race.description && <p className="text-xs text-slate-400 line-clamp-2">{race.description}</p>}
                 {race.statModifiers.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#1e2130]">
                     {race.statModifiers.map((mod) => {
@@ -109,7 +109,7 @@ export default function RacesPage() {
                   </div>
                 )}
                 {race.conditions.length > 0 && (
-                  <p className="text-xs text-slate-600">{race.conditions.length} condition{race.conditions.length !== 1 ? 's' : ''}</p>
+                  <p className="text-xs text-slate-400">{race.conditions.length} condition{race.conditions.length !== 1 ? 's' : ''}</p>
                 )}
               </div>
             ))}
@@ -148,13 +148,13 @@ export default function RacesPage() {
         )}
         {activeTab === 'modifiers' && (
           <div>
-            <p className="text-xs text-slate-500 mb-4">Définissez les bonus/malus apportés par cette race aux statistiques.</p>
+            <p className="text-xs text-slate-400 mb-4">Définissez les bonus/malus apportés par cette race aux statistiques.</p>
             <StatModifiersEditor modifiers={form.statModifiers} stats={stats} onChange={(mods) => setField('statModifiers', mods)} />
           </div>
         )}
         {activeTab === 'conditions' && (
           <div>
-            <p className="text-xs text-slate-500 mb-4">Ajoutez des conditions spécifiques à cette race (blessures, états, etc.).</p>
+            <p className="text-xs text-slate-400 mb-4">Ajoutez des conditions spécifiques à cette race (blessures, états, etc.).</p>
             <ConditionsEditor conditions={form.conditions} onChange={(c) => setField('conditions', c)} />
           </div>
         )}
@@ -176,3 +176,4 @@ export default function RacesPage() {
     </div>
   );
 }
+

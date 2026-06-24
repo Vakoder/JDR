@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plus, Pencil, Trash2, Zap } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { Skill, CostType } from '../types';
@@ -108,11 +108,11 @@ export default function SkillsPage() {
                       <h3 className="font-semibold text-white leading-tight">{skill.name}</h3>
                     </div>
                     <div className="flex gap-1 shrink-0">
-                      <button onClick={() => openEdit(skill)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={14} /></button>
-                      <button onClick={() => setDeleteTarget(skill)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={14} /></button>
+                      <button onClick={() => openEdit(skill)} className="text-slate-400 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={14} /></button>
+                      <button onClick={() => setDeleteTarget(skill)} className="text-slate-400 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={14} /></button>
                     </div>
                   </div>
-                  {skill.description && <p className="text-xs text-slate-500 line-clamp-2">{skill.description}</p>}
+                  {skill.description && <p className="text-xs text-slate-400 line-clamp-2">{skill.description}</p>}
                   <div className="flex gap-2 flex-wrap pt-1 border-t border-[#1e2130]">
                     {skill.cost > 0 && <Badge color="yellow">{skill.cost} {costLabel}</Badge>}
                     {linkedStat && <Badge color="blue">{linkedStat}</Badge>}
@@ -186,7 +186,7 @@ export default function SkillsPage() {
             )}
             {classes.length > 0 && (
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-2">Classes autorisées <span className="text-slate-600">(vide = toutes)</span></label>
+                <label className="text-xs font-medium text-slate-400 block mb-2">Classes autorisées <span className="text-slate-400">(vide = toutes)</span></label>
                 <div className="flex flex-wrap gap-2">
                   {classes.map((cls) => (
                     <label key={cls.id} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-colors ${form.allowedClassIds.includes(cls.id) ? 'bg-cyan-600/20 border-cyan-600/40 text-cyan-300' : 'border-[#2a2d3a] text-slate-400 hover:border-slate-500'}`}>
@@ -201,7 +201,7 @@ export default function SkillsPage() {
         )}
         {activeTab === 'conditions' && (
           <div>
-            <p className="text-xs text-slate-500 mb-4">Conditions nécessaires pour utiliser cette compétence.</p>
+            <p className="text-xs text-slate-400 mb-4">Conditions nécessaires pour utiliser cette compétence.</p>
             <ConditionsEditor conditions={form.conditions} onChange={(c) => setField('conditions', c)} />
           </div>
         )}
@@ -223,3 +223,4 @@ export default function SkillsPage() {
     </div>
   );
 }
+

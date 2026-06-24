@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+﻿import { v4 as uuidv4 } from 'uuid';
 import { Plus, Trash2 } from 'lucide-react';
 import type { Condition } from '../../types';
 import Button from './Button';
@@ -21,7 +21,7 @@ export default function ConditionsEditor({ conditions, onChange }: ConditionsEdi
   return (
     <div className="flex flex-col gap-3">
       {conditions.length === 0 && (
-        <p className="text-xs text-slate-500 italic">Aucune condition définie.</p>
+        <p className="text-xs text-slate-400 italic">Aucune condition définie.</p>
       )}
       {conditions.map((cond) => (
         <div key={cond.id} className="flex gap-2 items-start bg-[#1a1d28] border border-[#2a2d3a] rounded-lg p-3">
@@ -35,7 +35,7 @@ export default function ConditionsEditor({ conditions, onChange }: ConditionsEdi
           </div>
           <button
             onClick={() => remove(cond.id)}
-            className="mt-6 text-slate-600 hover:text-red-400 transition-colors"
+            className="mt-6 text-slate-400 hover:text-red-400 transition-colors"
           >
             <Trash2 size={16} />
           </button>
@@ -53,3 +53,4 @@ export default function ConditionsEditor({ conditions, onChange }: ConditionsEdi
     </div>
   );
 }
+

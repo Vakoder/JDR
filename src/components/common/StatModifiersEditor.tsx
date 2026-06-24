@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from 'lucide-react';
+﻿import { Plus, Trash2 } from 'lucide-react';
 import type { Stat, StatModifier } from '../../types';
 import Button from './Button';
 import SelectField from './SelectField';
@@ -26,7 +26,7 @@ export default function StatModifiersEditor({ modifiers, stats, onChange }: Stat
   const statOptions = stats.map((s) => ({ value: s.id, label: `${s.name} (${s.abbreviation})` }));
 
   if (stats.length === 0) {
-    return <p className="text-xs text-slate-500 italic">Créez d'abord des statistiques pour définir des modificateurs.</p>;
+    return <p className="text-xs text-slate-400 italic">Créez d'abord des statistiques pour définir des modificateurs.</p>;
   }
 
   return (
@@ -52,7 +52,7 @@ export default function StatModifiersEditor({ modifiers, stats, onChange }: Stat
           </div>
           <button
             onClick={() => remove(i)}
-            className="mb-0.5 text-slate-600 hover:text-red-400 transition-colors"
+            className="mb-0.5 text-slate-400 hover:text-red-400 transition-colors"
           >
             <Trash2 size={16} />
           </button>
@@ -66,3 +66,4 @@ export default function StatModifiersEditor({ modifiers, stats, onChange }: Stat
     </div>
   );
 }
+

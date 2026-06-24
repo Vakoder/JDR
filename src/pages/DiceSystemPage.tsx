@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Dice6, RefreshCw } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { DiceType } from '../types';
@@ -239,7 +239,7 @@ export default function DiceSystemPage() {
                         <div className="flex items-center gap-3">
                           <div className="text-2xl font-bold text-white">{roll.total}</div>
                           {roll.values.length > 1 && (
-                            <div className="text-xs text-slate-500">[{roll.values.join(', ')}]</div>
+                            <div className="text-xs text-slate-400">[{roll.values.join(', ')}]</div>
                           )}
                         </div>
                         <span className={`text-sm font-semibold ${conf.color}`}>{conf.label}</span>
@@ -255,3 +255,4 @@ export default function DiceSystemPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plus, Pencil, Trash2, Package } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { Item, ItemType, ItemSlot, MonetaryUnit } from '../types';
@@ -155,12 +155,12 @@ export default function ItemsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#2a2d3a]">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Nom</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Type</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Emplacement</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Poids</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Valeur</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Propriétés</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Nom</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Type</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Emplacement</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Poids</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Valeur</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase">Propriétés</th>
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -169,7 +169,7 @@ export default function ItemsPage() {
                   return <tr key={item.id} className={`border-b border-[#1e2130] last:border-0 hover:bg-[#1a1d28] transition-colors ${i % 2 === 0 ? '' : 'bg-[#111318]'}`}>
                     <td className="px-5 py-3">
                       <p className="font-medium text-white">{item.name}</p>
-                      {item.description && <p className="text-xs text-slate-500 truncate max-w-xs">{item.description}</p>}
+                      {item.description && <p className="text-xs text-slate-400 truncate max-w-xs">{item.description}</p>}
                     </td>
                     <td className="px-5 py-3">
                       <Badge color={TYPE_COLORS[item.type] as any}>{TYPE_LABELS[item.type]}</Badge>
@@ -192,8 +192,8 @@ export default function ItemsPage() {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
-                        <button onClick={() => openEdit(item)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={15} /></button>
-                        <button onClick={() => setDeleteTarget(item)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={15} /></button>
+                        <button onClick={() => openEdit(item)} className="text-slate-400 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={15} /></button>
+                        <button onClick={() => setDeleteTarget(item)} className="text-slate-400 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={15} /></button>
                       </div>
                     </td>
                   </tr>
@@ -273,13 +273,13 @@ export default function ItemsPage() {
         )}
         {activeTab === 'effects' && (
           <div>
-            <p className="text-xs text-slate-500 mb-4">Modificateurs de statistiques apportés par cet objet quand il est équipé.</p>
+            <p className="text-xs text-slate-400 mb-4">Modificateurs de statistiques apportés par cet objet quand il est équipé.</p>
             <StatModifiersEditor modifiers={form.statModifiers} stats={stats} onChange={(mods) => setField('statModifiers', mods)} />
           </div>
         )}
         {activeTab === 'conditions' && (
           <div>
-            <p className="text-xs text-slate-500 mb-4">Conditions liées à l'utilisation de cet objet.</p>
+            <p className="text-xs text-slate-400 mb-4">Conditions liées à l'utilisation de cet objet.</p>
             <ConditionsEditor conditions={form.conditions} onChange={(c) => setField('conditions', c)} />
           </div>
         )}
@@ -301,3 +301,4 @@ export default function ItemsPage() {
     </div>
   );
 }
+

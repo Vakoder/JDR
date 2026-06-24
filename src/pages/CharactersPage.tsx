@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plus, Pencil, Trash2, Users, User, UserCog } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { Character, CharacterType, InventoryEntry, MonetaryUnit } from '../types';
@@ -233,15 +233,15 @@ export default function CharactersPage() {
                     </div>
                   </div>
                   <div className="flex gap-1 shrink-0">
-                    <button onClick={() => openEdit(char)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded transition-colors hover:bg-amber-600/10">
+                    <button onClick={() => openEdit(char)} className="text-slate-400 hover:text-amber-400 p-1.5 rounded transition-colors hover:bg-amber-600/10">
                       <Pencil size={14} />
                     </button>
-                    <button onClick={() => setDeleteTarget(char)} className="text-slate-500 hover:text-red-400 p-1.5 rounded transition-colors hover:bg-red-600/10">
+                    <button onClick={() => setDeleteTarget(char)} className="text-slate-400 hover:text-red-400 p-1.5 rounded transition-colors hover:bg-red-600/10">
                       <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-1 text-xs text-slate-500">
+                <div className="grid grid-cols-2 gap-1 text-xs text-slate-400">
                   <span>Race: <span className="text-slate-300">{getRaceName(char.raceId)}</span></span>
                   <span>Classe: <span className="text-slate-300">{getClassName(char.classId)}</span></span>
                 </div>
@@ -251,14 +251,14 @@ export default function CharactersPage() {
                       const stat = stats.find((s) => s.id === sid);
                       return stat ? (
                         <span key={sid} className="text-xs px-2 py-0.5 bg-[#1e2130] rounded text-slate-300">
-                          <span className="text-slate-500">{stat.abbreviation}:</span> {val}
+                          <span className="text-slate-400">{stat.abbreviation}:</span> {val}
                         </span>
                       ) : null;
                     })}
                   </div>
                 )}
                 {char.description && (
-                  <p className="text-xs text-slate-500 line-clamp-2">{char.description}</p>
+                  <p className="text-xs text-slate-400 line-clamp-2">{char.description}</p>
                 )}
               </div>
             ))}
@@ -405,7 +405,7 @@ export default function CharactersPage() {
         {activeTab === 'stats' && (
           <div className="flex flex-col gap-3">
             {stats.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-8">Créez d'abord des statistiques dans la section "Statistiques".</p>
+              <p className="text-slate-400 text-sm text-center py-8">Créez d'abord des statistiques dans la section "Statistiques".</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {stats.map((stat) => {
@@ -417,7 +417,7 @@ export default function CharactersPage() {
                       <div className="flex items-center justify-between mb-1.5">
                         <label className="text-xs text-slate-400 font-medium">
                           {stat.name}
-                          <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
+                          <span className="text-slate-400 ml-1">({stat.abbreviation})</span>
                         </label>
                         {modifier !== 0 && (
                           <span className="text-xs font-mono font-semibold text-white">
@@ -436,12 +436,12 @@ export default function CharactersPage() {
                             onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
                             className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
                           />
-                          <span className="text-slate-600 text-sm">/</span>
+                          <span className="text-slate-400 text-sm">/</span>
                           <input
                             type="number"
                             value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
                             onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
-                            className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-amber-500/50"
+                            className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-400 focus:outline-none focus:border-amber-500/50"
                           />
                         </div>
                       ) : (
@@ -464,7 +464,7 @@ export default function CharactersPage() {
         {activeTab === 'skills' && (
           <div className="flex flex-col gap-2">
             {skills.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-8">Créez d'abord des compétences dans la section "Compétences".</p>
+              <p className="text-slate-400 text-sm text-center py-8">Créez d'abord des compétences dans la section "Compétences".</p>
             ) : (
               skills.map((skill) => {
                 const linkedStat = stats.find((s) => s.id === skill.linkedStatId);
@@ -489,7 +489,7 @@ export default function CharactersPage() {
                     />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-slate-200">{skill.name}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-slate-400">
                         {linkedStat ? `Lié à ${linkedStat.name}` : 'Aucune stat'} · {skill.cost} {skill.costType === 'CUSTOM' ? skill.costTypeCustomName : skill.costType}
                       </p>
                       <p
@@ -519,7 +519,7 @@ export default function CharactersPage() {
             />
             {/* Inventory list */}
             {form.inventory.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-6">Inventaire vide.</p>
+              <p className="text-slate-400 text-sm text-center py-6">Inventaire vide.</p>
             ) : (
               <div className="flex flex-col gap-2">
                 {form.inventory.map((entry) => {
@@ -543,9 +543,9 @@ export default function CharactersPage() {
                       <div className="flex-1">
                         <p className="text-sm font-medium text-slate-200">
                           {item.name}
-                          {instanceLabel && <span className="text-slate-500 font-normal">{instanceLabel}</span>}
+                          {instanceLabel && <span className="text-slate-400 font-normal">{instanceLabel}</span>}
                         </p>
-                        <p className="text-xs text-slate-500">{item.type} · {item.slot}</p>
+                        <p className="text-xs text-slate-400">{item.type} · {item.slot}</p>
                       </div>
                       {item.stackable && (
                         <input
@@ -573,7 +573,7 @@ export default function CharactersPage() {
                           </p>
                         </label>
                       )}
-                      <button onClick={() => removeInventoryItem(entry.instanceId)} className="text-slate-600 hover:text-red-400 transition-colors">
+                      <button onClick={() => removeInventoryItem(entry.instanceId)} className="text-slate-400 hover:text-red-400 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
@@ -601,3 +601,4 @@ export default function CharactersPage() {
     </div>
   );
 }
+

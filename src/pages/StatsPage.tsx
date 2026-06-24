@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plus, Pencil, Trash2, BarChart2 } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import type { Stat } from '../types';
@@ -92,11 +92,11 @@ export default function StatsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#2a2d3a]">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nom</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Abrév.</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Défaut</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Max</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Nom</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Abrév.</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Défaut</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Max</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</th>
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -114,18 +114,18 @@ export default function StatsPage() {
                     </td>
                     <td className="px-5 py-3 text-slate-400">{stat.defaultValue}</td>
                     <td className="px-5 py-3 text-slate-400">{stat.maxValue ?? '—'}</td>
-                    <td className="px-5 py-3 text-slate-500 max-w-xs truncate">{stat.description || '—'}</td>
+                    <td className="px-5 py-3 text-slate-400 max-w-xs truncate">{stat.description || '—'}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
                         <button
                           onClick={() => openEdit(stat)}
-                          className="text-slate-500 hover:text-amber-400 transition-colors p-1.5 rounded hover:bg-amber-600/10"
+                          className="text-slate-400 hover:text-amber-400 transition-colors p-1.5 rounded hover:bg-amber-600/10"
                         >
                           <Pencil size={15} />
                         </button>
                         <button
                           onClick={() => setDeleteTarget(stat)}
-                          className="text-slate-500 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-600/10"
+                          className="text-slate-400 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-600/10"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -231,3 +231,4 @@ export default function StatsPage() {
     </div>
   );
 }
+

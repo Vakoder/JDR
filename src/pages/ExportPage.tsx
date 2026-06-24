@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Download, FileJson, FileText, CheckCircle } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
 import { exportToJSON } from '../services/exportService';
@@ -82,11 +82,11 @@ export default function ExportPage() {
             {stats.map(({ label, value }) => (
               <div key={label} className="bg-[#0f1117] border border-[#2a2d3a] rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-amber-400">{value}</div>
-                <div className="text-sm text-slate-500 mt-1">{label}</div>
+                <div className="text-sm text-slate-400 mt-1">{label}</div>
               </div>
             ))}
           </div>
-          <div className="mt-4 flex gap-4 text-xs text-slate-500">
+          <div className="mt-4 flex gap-4 text-xs text-slate-400">
             <span>Créé le: {new Date(ruleSet.createdAt).toLocaleDateString('fr-FR')}</span>
             <span>Modifié le: {new Date(ruleSet.updatedAt).toLocaleDateString('fr-FR')}</span>
           </div>
@@ -102,10 +102,10 @@ export default function ExportPage() {
               </div>
               <div>
                 <p className="font-semibold text-white">Export JSON</p>
-                <p className="text-xs text-slate-500">Format réimportable complet</p>
+                <p className="text-xs text-slate-400">Format réimportable complet</p>
               </div>
             </div>
-            <ul className="text-xs text-slate-500 space-y-1">
+            <ul className="text-xs text-slate-400 space-y-1">
               <li>✓ Toutes les données préservées</li>
               <li>✓ Réimportable dans l'application</li>
               <li>✓ Version incluse: v{ruleSet.version}</li>
@@ -129,10 +129,10 @@ export default function ExportPage() {
               </div>
               <div>
                 <p className="font-semibold text-white">Export PDF</p>
-                <p className="text-xs text-slate-500">Document lisible et imprimable</p>
+                <p className="text-xs text-slate-400">Document lisible et imprimable</p>
               </div>
             </div>
-            <ul className="text-xs text-slate-500 space-y-1">
+            <ul className="text-xs text-slate-400 space-y-1">
               <li>✓ Statistiques, Races, Classes</li>
               <li>✓ Personnages, Objets, Compétences</li>
               <li>✓ Système de résolution</li>
@@ -153,3 +153,4 @@ export default function ExportPage() {
     </div>
   );
 }
+
