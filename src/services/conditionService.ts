@@ -75,9 +75,6 @@ export class ConditionEvaluator {
             if (statDefinition) {
                 variables[`Character_${statName}Max`] =
                     statDefinition.maxValue;
-
-                variables[`Character_${statName}Min`] =
-                    statDefinition.minValue;
             }
         }
 
