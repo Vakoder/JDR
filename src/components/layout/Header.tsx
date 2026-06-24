@@ -38,7 +38,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
           {title}
         </h1>
         {subtitle && (
-          <p style={{ margin: 0, fontSize: '12px', color: '#5a5a5e', marginTop: '1px' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: '#a0a0b0', marginTop: '1px' }}>
             {subtitle}
           </p>
         )}
@@ -48,7 +48,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
         {ruleSet && (
           <span style={{
             fontSize: '11px',
-            color: '#5a5a5e',
+            color: '#a0a0b0',
             backgroundColor: '#222224',
             padding: '3px 10px',
             borderRadius: '20px',
@@ -65,7 +65,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
             alignItems: 'center',
             gap: '6px',
             fontSize: '13px',
-            color: '#7a7a80',
+            color: '#a0a0b0',
             background: 'none',
             border: '1px solid #2e2e32',
             borderRadius: '7px',
@@ -78,7 +78,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
             (e.currentTarget as HTMLButtonElement).style.borderColor = '#404046';
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = '#7a7a80';
+            (e.currentTarget as HTMLButtonElement).style.color = '#a0a0b0';
             (e.currentTarget as HTMLButtonElement).style.borderColor = '#2e2e32';
           }}
         >

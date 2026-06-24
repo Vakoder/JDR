@@ -95,7 +95,7 @@ export default function HomePage() {
           <p style={{
             margin: 0,
             fontSize: '15px',
-            color: '#5a5a5e',
+            color: '#a0a0b0',
             maxWidth: '380px',
           }}>
             Créez, modifiez et exportez des systèmes de règles pour vos jeux de rôle.
@@ -162,7 +162,7 @@ export default function HomePage() {
               }}>
                 Créer un nouveau set
               </p>
-              <p style={{ margin: 0, fontSize: '12px', color: '#5a5a5e', lineHeight: 1.5 }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#a0a0b0', lineHeight: 1.5 }}>
                 Démarrez avec un set vide et construisez vos règles from scratch.
               </p>
             </div>
@@ -221,7 +221,7 @@ export default function HomePage() {
               }}>
                 Importer un set
               </p>
-              <p style={{ margin: 0, fontSize: '12px', color: '#5a5a5e', lineHeight: 1.5 }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#a0a0b0', lineHeight: 1.5 }}>
                 Chargez un fichier JSON existant pour le modifier.
               </p>
             </div>
@@ -248,7 +248,7 @@ export default function HomePage() {
           </div>
         )}
 
-        <p style={{ fontSize: '11px', color: '#3a3a3e', margin: 0 }}>
+        <p style={{ fontSize: '11px', color: '#8a8a9a', margin: 0 }}>
           Format supporté : JSON (.json)
         </p>
       </div>

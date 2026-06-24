@@ -83,7 +83,7 @@ export default function DashboardPage() {
               style={{
                 width: '100%',
                 fontSize: '13px',
-                color: '#5a5a5e',
+                color: '#a0a0b0',
                 backgroundColor: 'transparent',
                 border: 'none',
                 outline: 'none',
@@ -99,7 +99,7 @@ export default function DashboardPage() {
               gap: '16px',
               marginTop: '10px',
               fontSize: '11px',
-              color: '#3a3a3e',
+              color: '#8a8a9a',
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <Calendar size={11} />
@@ -161,7 +161,7 @@ export default function DashboardPage() {
                 }}>
                   {count}
                 </div>
-                <div style={{ fontSize: '11px', color: '#5a5a5e' }}>
+                <div style={{ fontSize: '11px', color: '#a0a0b0' }}>
                   {card.label}
                 </div>
               </button>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           <span style={{
             fontSize: '11px',
             fontWeight: 600,
-            color: '#3a3a3e',
+            color: '#8a8a9a',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
           }}>
@@ -246,13 +246,13 @@ export default function DashboardPage() {
                       {card.label}
                     </p>
                     {count !== null && (
-                      <p style={{ margin: 0, fontSize: '11px', color: '#3a3a3e' }}>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#8a8a9a' }}>
                         {count} élément{count !== 1 ? 's' : ''}
                       </p>
                     )}
                   </div>
                 </div>
-                <ArrowRight size={14} color="#3a3a3e" />
+                <ArrowRight size={14} color="#8a8a9a" />
               </button>
             );
           })}
