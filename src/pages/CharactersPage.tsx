@@ -378,7 +378,7 @@ export default function CharactersPage() {
                   if (i === monetarySystem.length - 1) {
                     return <FormField label={monetaryUnit.name} type="number" min={0} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
                   }
-                  return <FormField label={monetaryUnit.name} type="number" min={0} max={monetaryUnit.base} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
+                  return <FormField label={monetaryUnit.name} type="number" min={0} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
                 })
               }
             </div>

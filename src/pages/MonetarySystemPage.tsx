@@ -12,7 +12,7 @@ import EmptyState from '../components/common/EmptyState';
 
 const emptyForm = (): Omit<MonetaryUnit, 'id'> => ({
   name: '',
-  base: 0,
+  value: 0.001,
 });
 
 export default function StatsPage() {
@@ -32,7 +32,7 @@ export default function StatsPage() {
 
   const openEdit = (monetaryUnit: MonetaryUnit) => {
     setEditing(monetaryUnit);
-    setForm({ name: monetaryUnit.name, base: monetaryUnit.base });
+    setForm({ name: monetaryUnit.name, value: monetaryUnit.value });
     setModalOpen(true);
   };
 
@@ -48,6 +48,13 @@ export default function StatsPage() {
 
   const setField = <K extends keyof typeof form>(k: K, v: typeof form[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
+
+  const currentMonetaryUnit: MonetaryUnit = {
+      ...(editing ?? {
+        id: 'temp',
+      }),
+      ...form,
+    };
 
   return (
     <div className="flex flex-col min-h-full">
@@ -70,7 +77,7 @@ export default function StatsPage() {
               <thead>
                 <tr className="border-b border-[#2a2d3a]">
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nom</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Maximum</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{monetarySystem.length > 0 ? "Valeur par rapport à '" + monetarySystem[0].name + "'": "Valeur"}</th>
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -81,7 +88,7 @@ export default function StatsPage() {
                     className={`border-b border-[#1e2130] last:border-0 hover:bg-[#1a1d28] transition-colors ${i % 2 === 0 ? '' : 'bg-[#111318]'}`}
                   >
                     <td className="px-5 py-3 font-medium text-white">{monetaryUnit.name}</td>
-                    <td className="px-5 py-3 text-slate-400">{i === monetarySystem.length - 1 ?  '—' : monetaryUnit.base}</td>
+                    <td className="px-5 py-3 text-slate-400">{i === 0 ? '—' : monetaryUnit.value}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
                         <button
@@ -135,13 +142,17 @@ export default function StatsPage() {
               placeholder="ex: Argent"
               onChange={(e) => setField('name', e.target.value)}
             />
-            <FormField
-              label="Maximum"
-              type="number"
-              value={form.base}
-              placeholder="ex: 10"
-              onChange={(e) => setField('base', parseInt(e.target.value))}
-            />
+            { currentMonetaryUnit.id != monetarySystem[0].id && (
+              <FormField
+                label={"Valeur par rapport à '" + monetarySystem[0].name + "'"}
+                type="number"
+                value={form.value}
+                min={0}
+                placeholder="ex: 10"
+                onChange={(e) => { const val = Math.max(parseFloat(e.target.value), 0.001); setField('value', val); }}
+              />
+            )}
+
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-[#2a2d3a] mt-2">
             <Button variant="secondary" onClick={() => setModalOpen(false)}>Annuler</Button>
