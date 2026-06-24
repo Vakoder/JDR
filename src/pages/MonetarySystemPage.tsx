@@ -12,7 +12,7 @@ import EmptyState from '../components/common/EmptyState';
 
 const emptyForm = (): Omit<MonetaryUnit, 'id'> => ({
   name: '',
-  value: 0,
+  value: 0.001,
 });
 
 export default function StatsPage() {
@@ -149,7 +149,7 @@ export default function StatsPage() {
                 value={form.value}
                 min={0}
                 placeholder="ex: 10"
-                onChange={(e) => { const val = Math.max(parseInt(e.target.value), 0.001); setField('value', val); }}
+                onChange={(e) => { const val = Math.max(parseFloat(e.target.value), 0.001); setField('value', val); }}
               />
             )}
 
