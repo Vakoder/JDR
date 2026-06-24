@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2, Users, User, UserCog } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
-import type { Character, CharacterType, InventoryEntry } from '../types';
+import type { Character, CharacterType, InventoryEntry, MonetaryUnit } from '../types';
 import Header from '../components/layout/Header';
 import PageHeader from '../components/common/PageHeader';
 import Button from '../components/common/Button';
@@ -14,18 +14,27 @@ import EmptyState from '../components/common/EmptyState';
 import Badge from '../components/common/Badge';
 import evaluateConditions from '../services/conditionService.ts';
 
-const emptyForm = (): Omit<Character, 'id'> => ({
-  name: '',
-  type: 'PC',
-  raceId: null,
-  classId: null,
-  stats: {},
-  statsMax: {},
-  skillIds: [],
-  inventory: [],
-  description: '',
-  notes: '',
-});
+const emptyForm = (monetarySystem: MonetaryUnit[]): Omit<Character, 'id'> => {
+  var baseEconomy: { id: string, value: number }[] = [];
+
+  monetarySystem.forEach(monetaryUnit => {
+    baseEconomy.push({ id: monetaryUnit.id, value: 0 });
+  });
+
+  return {
+    name: '',
+    type: 'PC',
+    raceId: null,
+    classId: null,
+    stats: {},
+    statsMax: {},
+    economy: baseEconomy,
+    skillIds: [],
+    inventory: [],
+    description: '',
+    notes: '',
+  }
+};
 
 type Tab = 'identity' | 'stats' | 'skills' | 'inventory';
 
@@ -37,13 +46,14 @@ export default function CharactersPage() {
   const classes = ruleSet?.classes ?? [];
   const skills = ruleSet?.skills ?? [];
   const items = ruleSet?.items ?? [];
+  const monetarySystem = ruleSet?.monetarySystem ?? [];
 
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<'ALL' | CharacterType>('ALL');
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('identity');
   const [editing, setEditing] = useState<Character | null>(null);
-  const [form, setForm] = useState(emptyForm());
+  const [form, setForm] = useState(emptyForm(monetarySystem));
   const [deleteTarget, setDeleteTarget] = useState<Character | null>(null);
 
   const filtered = characters.filter((c) => {
@@ -54,7 +64,7 @@ export default function CharactersPage() {
 
   const openCreate = () => {
     setEditing(null);
-    setForm(emptyForm());
+    setForm(emptyForm(monetarySystem));
     setActiveTab('identity');
     setModalOpen(true);
   };
@@ -311,6 +321,28 @@ export default function CharactersPage() {
                 )}
                 onChange={(e) => setField('classId', e.target.value || null)}
               />
+            </div>
+            <div className={"grid grid-cols-" + monetarySystem.length + " gap-4"}>
+              {
+                monetarySystem.map((monetaryUnit, i) => {
+                  const value: number = form.economy.find((x) => x.id == monetaryUnit.id)?.value ?? 0;
+
+                  function changeValue(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, id: string) {
+                    const t = form.economy.find((x) => x.id === id);
+
+                    if (t == null) return;
+
+                    t.value = parseInt(e.target.value);
+
+                    setField('economy', form.economy);
+                  }
+
+                  if (i === monetarySystem.length - 1) {
+                    return <FormField label={monetaryUnit.name} type="number" min={0} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
+                  }
+                  return <FormField label={monetaryUnit.name} type="number" min={0} max={monetaryUnit.base} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
+                })
+              }
             </div>
             <FormField
               as="textarea"

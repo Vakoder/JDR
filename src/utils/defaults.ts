@@ -25,5 +25,6 @@ export const createEmptyRuleSet = (name = 'Nouveau set de règles'): RuleSet => 
   characters: [],
   items: [],
   skills: [],
+  monetarySystem: [],
   diceSystem: createDefaultDiceSystem(),
 });

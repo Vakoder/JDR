@@ -19,6 +19,7 @@ import { useRuleSetStore } from '../../store/ruleSetStore';
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/stats', icon: BarChart2, label: 'Statistiques' },
+  { to: '/monetary', icon: BarChart2, label: 'Système Monétaire' },
   { to: '/characters', icon: Users, label: 'Personnages' },
   { to: '/races', icon: Shield, label: 'Races' },
   { to: '/classes', icon: Sword, label: 'Classes' },

@@ -32,5 +32,6 @@ function validateRuleSet(data: unknown): asserts data is RuleSet {
   if (!Array.isArray(rs.characters)) throw new Error();
   if (!Array.isArray(rs.items)) throw new Error();
   if (!Array.isArray(rs.skills)) throw new Error();
+  if (!Array.isArray(rs.monetarySystem)) throw new Error();
   if (typeof rs.diceSystem !== 'object') throw new Error();
 }

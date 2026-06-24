@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2, Package } from 'lucide-react';
 import { useRuleSetStore } from '../store/ruleSetStore';
-import type { Item, ItemType, ItemSlot } from '../types';
+import type { Item, ItemType, ItemSlot, MonetaryUnit } from '../types';
 import Header from '../components/layout/Header';
 import PageHeader from '../components/common/PageHeader';
 import Button from '../components/common/Button';
@@ -52,18 +52,26 @@ const TYPE_LABELS: Record<ItemType, string> = {
   MISC: 'Divers',
 };
 
-const emptyForm = (): Omit<Item, 'id'> => ({
-  name: '',
-  description: '',
-  type: 'MISC',
-  slot: 'NONE',
-  statModifiers: [],
-  conditions: [],
-  weight: 0,
-  value: 0,
-  equippable: false,
-  stackable: false,
-});
+const emptyForm = (monetarySystem: MonetaryUnit[]): Omit<Item, 'id'> => {
+  var baseValue: { id: string, value: number }[] = [];
+
+  monetarySystem.forEach(monetaryUnit => {
+    baseValue.push({ id: monetaryUnit.id, value: 0 });
+  });
+
+  return {
+    name: '',
+    description: '',
+    type: 'MISC',
+    slot: 'NONE',
+    statModifiers: [],
+    conditions: [],
+    weight: 0,
+    value: baseValue,
+    equippable: false,
+    stackable: false,
+  }
+};
 
 type Tab = 'info' | 'effects' | 'conditions';
 
@@ -71,13 +79,14 @@ export default function ItemsPage() {
   const { ruleSet, addItem, updateItem, deleteItem } = useRuleSetStore();
   const items = ruleSet?.items ?? [];
   const stats = ruleSet?.stats ?? [];
+  const monetarySystem = ruleSet?.monetarySystem ?? [];
 
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<ItemType | 'ALL'>('ALL');
   const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('info');
   const [editing, setEditing] = useState<Item | null>(null);
-  const [form, setForm] = useState(emptyForm());
+  const [form, setForm] = useState(emptyForm(ruleSet?.monetarySystem ?? []));
   const [deleteTarget, setDeleteTarget] = useState<Item | null>(null);
 
   const filtered = items.filter((it) => {
@@ -86,7 +95,7 @@ export default function ItemsPage() {
     return matchSearch && matchType;
   });
 
-  const openCreate = () => { setEditing(null); setForm(emptyForm()); setActiveTab('info'); setModalOpen(true); };
+  const openCreate = () => { setEditing(null); setForm(emptyForm(ruleSet?.monetarySystem ?? [])); setActiveTab('info'); setModalOpen(true); };
   const openEdit = (item: Item) => { setEditing(item); setForm({ ...item }); setActiveTab('info'); setModalOpen(true); };
 
   const handleSave = () => {
@@ -128,11 +137,10 @@ export default function ItemsPage() {
                 <button
                   key={type}
                   onClick={() => setFilterType(type as any)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                    filterType === type
-                      ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
-                      : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${filterType === type
+                    ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
+                    : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
+                    }`}
                 >
                   {type === 'ALL' ? 'Tous' : TYPE_LABELS[type as ItemType]}
                 </button>
@@ -156,8 +164,8 @@ export default function ItemsPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((item, i) => (
-                  <tr key={item.id} className={`border-b border-[#1e2130] last:border-0 hover:bg-[#1a1d28] transition-colors ${i % 2 === 0 ? '' : 'bg-[#111318]'}`}>
+                {filtered.map((item, i) => {
+                  return <tr key={item.id} className={`border-b border-[#1e2130] last:border-0 hover:bg-[#1a1d28] transition-colors ${i % 2 === 0 ? '' : 'bg-[#111318]'}`}>
                     <td className="px-5 py-3">
                       <p className="font-medium text-white">{item.name}</p>
                       {item.description && <p className="text-xs text-slate-500 truncate max-w-xs">{item.description}</p>}
@@ -167,7 +175,13 @@ export default function ItemsPage() {
                     </td>
                     <td className="px-5 py-3 text-slate-400">{ITEM_SLOTS.find((s) => s.value === item.slot)?.label ?? item.slot}</td>
                     <td className="px-5 py-3 text-slate-400">{item.weight} kg</td>
-                    <td className="px-5 py-3 text-slate-400">{item.value} po</td>
+                    <td className="px-5 py-3 text-slate-400">
+                      {
+                        item.value.map(monetaryUnit => {
+                          return <div>{monetaryUnit.value} {monetarySystem.find(x => x.id == monetaryUnit.id)?.name}</div>;
+                        })
+                      }
+                    </td>
                     <td className="px-5 py-3">
                       <div className="flex gap-1.5 flex-wrap">
                         {item.equippable && <Badge color="violet">Équipable</Badge>}
@@ -182,7 +196,7 @@ export default function ItemsPage() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                })}
               </tbody>
             </table>
           </div>
@@ -219,9 +233,30 @@ export default function ItemsPage() {
               <SelectField label="Type" value={form.type} options={ITEM_TYPES} onChange={(e) => setField('type', e.target.value as ItemType)} />
               <SelectField label="Emplacement" value={form.slot} options={ITEM_SLOTS} onChange={(e) => setField('slot', e.target.value as ItemSlot)} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-4">
               <FormField label="Poids (kg)" type="number" min={0} step={0.1} value={form.weight} onChange={(e) => setField('weight', parseFloat(e.target.value) || 0)} />
-              <FormField label="Valeur (po)" type="number" min={0} value={form.value} onChange={(e) => setField('value', parseInt(e.target.value) || 0)} />
+            </div>
+            <div className={"grid grid-cols-" + monetarySystem.length + " gap-4"}>
+              {
+                monetarySystem.map((monetaryUnit, i) => {
+                  const value: number = form.value.find((x) => x.id == monetaryUnit.id)?.value ?? 0;
+
+                  function changeValue(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, id: string) {
+                    const t = form.value.find((x) => x.id === id);
+
+                    if (t == null) return;
+
+                    t.value = parseInt(e.target.value);
+
+                    setField('value', form.value);
+                  }
+
+                  if (i === monetarySystem.length - 1) {
+                    return <FormField label={monetaryUnit.name} type="number" min={0} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
+                  }
+                  return <FormField label={monetaryUnit.name} type="number" min={0} max={monetaryUnit.base} value={value} onChange={(e) => changeValue(e, monetaryUnit.id)} />;
+                })
+              }
             </div>
             <div className="flex gap-6">
               <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">

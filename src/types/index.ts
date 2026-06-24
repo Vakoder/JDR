@@ -99,7 +99,7 @@ export interface Item {
   statModifiers: StatModifier[];
   conditions: Condition[];
   weight: number;
-  value: number;
+  value: {id: string, value: number}[];
   equippable: boolean;
   stackable: boolean;
 }
@@ -122,10 +122,19 @@ export interface Character {
   classId: string | null;
   stats: Record<string, number>;
   statsMax: Record<string, number>;
+  economy: {id: string, value: number}[];
   skillIds: string[];
   inventory: InventoryEntry[];
   description: string;
   notes: string;
+}
+
+// ─── Monetary System ───────────────────────────────────────────────────────────────
+
+export interface MonetaryUnit {
+  id: string,
+  name: string;
+  base: number;
 }
 
 // ─── RuleSet (root) ──────────────────────────────────────────────────────────
@@ -143,5 +152,6 @@ export interface RuleSet {
   characters: Character[];
   items: Item[];
   skills: Skill[];
+  monetarySystem: MonetaryUnit[];
   diceSystem: DiceSystem;
 }
