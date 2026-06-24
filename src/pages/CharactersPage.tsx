@@ -94,9 +94,23 @@ export default function CharactersPage() {
     }));
 
   const addInventoryItem = (itemId: string) => {
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    if (item.stackable) {
+      const existing = form.inventory.find((e) => e.itemId === itemId);
+      if (existing) {
+        setForm((f) => ({
+          ...f,
+          inventory: f.inventory.map((e) =>
+            e.itemId === itemId ? { ...e, quantity: e.quantity + 1 } : e
+          ),
+        }));
+        return;
+      }
+    }
     setForm((f) => ({
       ...f,
-      inventory: [...f.inventory, { instanceId: crypto.randomUUID(), itemId, equipped: false }],
+      inventory: [...f.inventory, { instanceId: crypto.randomUUID(), itemId, quantity: 1, equipped: false }],
     }));
   };
 
@@ -440,6 +454,7 @@ export default function CharactersPage() {
                 {form.inventory.map((entry) => {
                   const item = items.find((it) => it.id === entry.itemId);
                   if (!item) return null;
+<<<<<<< HEAD
 
                   const usable =
                     item.conditions.length === 0 ||
@@ -453,6 +468,11 @@ export default function CharactersPage() {
                   const sameItemCount = form.inventory.filter((e) => e.itemId === item.id);
                   const instanceLabel = sameItemCount.length > 1
                     ? ` #${sameItemCount.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
+=======
+                  const sameInstances = form.inventory.filter((e) => e.itemId === item.id);
+                  const instanceLabel = !item.stackable && sameInstances.length > 1
+                    ? ` #${sameInstances.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
+>>>>>>> 5464006 (Stack stackable items in inventory, keep non-stackable as individual instances)
                     : '';
                   return (
                     <div key={entry.instanceId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
@@ -463,6 +483,15 @@ export default function CharactersPage() {
                         </p>
                         <p className="text-xs text-slate-500">{item.type} · {item.slot}</p>
                       </div>
+                      {item.stackable && (
+                        <input
+                          type="number"
+                          min={1}
+                          value={entry.quantity}
+                          onChange={(e) => updateInventoryEntry(entry.instanceId, 'quantity', parseInt(e.target.value) || 1)}
+                          className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500 text-center"
+                        />
+                      )}
                       {item.equippable && (
                         <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
                           <input
