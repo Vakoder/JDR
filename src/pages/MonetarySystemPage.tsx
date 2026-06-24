@@ -167,7 +167,7 @@ export default function StatsPage() {
       <ConfirmDialog
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        onConfirm={() => deleteTarget && deleteMonetaryUnit(deleteTarget.name)}
+        onConfirm={() => deleteTarget && deleteMonetaryUnit(deleteTarget.id)}
         message={`Supprimer l'unité "${deleteTarget?.name}" ? Cette action est irréversible.`}
       />
     </div>
