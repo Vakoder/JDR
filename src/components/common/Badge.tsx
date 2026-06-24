@@ -1,12 +1,12 @@
-type BadgeColor = 'violet' | 'blue' | 'green' | 'yellow' | 'red' | 'slate';
+type BadgeColor = 'amber' | 'blue' | 'green' | 'yellow' | 'red' | 'slate';
 
-const colorClasses: Record<BadgeColor, string> = {
-  violet: 'bg-violet-600/20 text-violet-300 border-violet-600/30',
-  blue: 'bg-blue-600/20 text-blue-300 border-blue-600/30',
-  green: 'bg-green-600/20 text-green-300 border-green-600/30',
-  yellow: 'bg-yellow-600/20 text-yellow-300 border-yellow-600/30',
-  red: 'bg-red-600/20 text-red-300 border-red-600/30',
-  slate: 'bg-slate-600/20 text-slate-300 border-slate-600/30',
+const colorStyles: Record<BadgeColor, React.CSSProperties> = {
+  amber: { backgroundColor: 'rgba(232,168,56,0.12)', color: '#e8a838', border: '1px solid rgba(232,168,56,0.3)' },
+  blue: { backgroundColor: 'rgba(59,130,246,0.12)', color: '#93c5fd', border: '1px solid rgba(59,130,246,0.3)' },
+  green: { backgroundColor: 'rgba(34,197,94,0.12)', color: '#86efac', border: '1px solid rgba(34,197,94,0.3)' },
+  yellow: { backgroundColor: 'rgba(234,179,8,0.12)', color: '#fde047', border: '1px solid rgba(234,179,8,0.3)' },
+  red: { backgroundColor: 'rgba(192,57,43,0.12)', color: '#e06050', border: '1px solid rgba(192,57,43,0.3)' },
+  slate: { backgroundColor: 'rgba(100,100,110,0.15)', color: '#9e9e9e', border: '1px solid rgba(100,100,110,0.3)' },
 };
 
 export default function Badge({
@@ -17,7 +17,16 @@ export default function Badge({
   color?: BadgeColor;
 }) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${colorClasses[color]}`}>
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      padding: '2px 8px',
+      borderRadius: '4px',
+      fontSize: '11px',
+      fontWeight: 500,
+      fontFamily: "'Inter', system-ui, sans-serif",
+      ...colorStyles[color],
+    }}>
       {children}
     </span>
   );

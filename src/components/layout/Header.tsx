@@ -12,22 +12,77 @@ export default function Header({ title, subtitle }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <header className="flex items-center justify-between px-8 py-4 border-b border-[#2a2d3a] bg-[#13151c]/80 backdrop-blur-sm sticky top-0 z-10">
+    <header
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '14px 28px',
+        borderBottom: '1px solid #2e2e32',
+        backgroundColor: 'rgba(23,23,25,0.85)',
+        backdropFilter: 'blur(8px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+      }}
+    >
       <div>
-        <h1 className="text-xl font-bold text-white">{title}</h1>
-        {subtitle && <p className="text-sm text-slate-500">{subtitle}</p>}
+        <h1 style={{
+          margin: 0,
+          fontSize: '22px',
+          fontFamily: "'Crimson Pro', Georgia, serif",
+          fontWeight: 600,
+          color: '#f0e6d3',
+          letterSpacing: '0.01em',
+        }}>
+          {title}
+        </h1>
+        {subtitle && (
+          <p style={{ margin: 0, fontSize: '12px', color: '#5a5a5e', marginTop: '1px' }}>
+            {subtitle}
+          </p>
+        )}
       </div>
-      <div className="flex items-center gap-3">
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         {ruleSet && (
-          <span className="text-xs text-slate-500 bg-[#1e2130] px-3 py-1 rounded-full border border-[#2a2d3a]">
+          <span style={{
+            fontSize: '11px',
+            color: '#5a5a5e',
+            backgroundColor: '#222224',
+            padding: '3px 10px',
+            borderRadius: '20px',
+            border: '1px solid #2e2e32',
+            fontFamily: 'monospace',
+          }}>
             v{ruleSet.version}
           </span>
         )}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors px-3 py-1.5 rounded-lg hover:bg-[#1e2130]"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontSize: '13px',
+            color: '#7a7a80',
+            background: 'none',
+            border: '1px solid #2e2e32',
+            borderRadius: '7px',
+            padding: '6px 12px',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = '#f0e6d3';
+            (e.currentTarget as HTMLButtonElement).style.borderColor = '#404046';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = '#7a7a80';
+            (e.currentTarget as HTMLButtonElement).style.borderColor = '#2e2e32';
+          }}
         >
-          <Home size={16} />
+          <Home size={14} />
           <span>Accueil</span>
         </button>
       </div>
