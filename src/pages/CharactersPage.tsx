@@ -454,8 +454,6 @@ export default function CharactersPage() {
                 {form.inventory.map((entry) => {
                   const item = items.find((it) => it.id === entry.itemId);
                   if (!item) return null;
-<<<<<<< HEAD
-
                   const usable =
                     item.conditions.length === 0 ||
                     evaluateConditions(
@@ -465,14 +463,9 @@ export default function CharactersPage() {
                       ruleSet
                     );
 
-                  const sameItemCount = form.inventory.filter((e) => e.itemId === item.id);
-                  const instanceLabel = sameItemCount.length > 1
-                    ? ` #${sameItemCount.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
-=======
                   const sameInstances = form.inventory.filter((e) => e.itemId === item.id);
                   const instanceLabel = !item.stackable && sameInstances.length > 1
                     ? ` #${sameInstances.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
->>>>>>> 5464006 (Stack stackable items in inventory, keep non-stackable as individual instances)
                     : '';
                   return (
                     <div key={entry.instanceId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
