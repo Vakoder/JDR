@@ -42,7 +42,7 @@ export class ConditionEvaluator {
                 context
             );
 
-            return Boolean(expression.evaluate(variables));
+            return Boolean(expression.evaluate(variables as never));
         } catch (error) {
             console.error(
                 `Failed to evaluate condition '${condition.id}'`,
@@ -64,7 +64,7 @@ export class ConditionEvaluator {
         // Character stats
         //
         for (const [statId, value] of Object.entries(character.stats)) {
-            const statName = context.ruleset.stats.find((x) => { return x.id == statId})?.name ?? "";
+            const statName = context.ruleset.stats.find((x) => { return x.id == statId })?.name ?? "";
 
             variables[`Character_${statName}`] = value;
 
@@ -95,7 +95,7 @@ export class ConditionEvaluator {
         variables["Character_Race"] =
             characterRace?.name ?? "";
 
-        
+
 
         //
         // Inventory helpers
@@ -151,11 +151,11 @@ export class ConditionEvaluator {
     }
 }
 
-export default function evaluateConditions( conditions: Condition[], character: Character, target: ConditionTarget, ruleset: RuleSet | null) : Boolean {
+export default function evaluateConditions(conditions: Condition[], character: Character, target: ConditionTarget, ruleset: RuleSet | null): Boolean {
     if (ruleset == null) return true;
 
     var finalResult: Boolean = true;
-    
+
     conditions.forEach(condition => {
         const evaluator = new ConditionEvaluator();
         const result = evaluator.evaluate(
