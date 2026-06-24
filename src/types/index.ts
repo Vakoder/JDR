@@ -6,7 +6,6 @@ export interface DiceSystem {
   diceType: DiceType;
   numberOfDice: number;
   successThreshold: number;
-  failureThreshold: number;
   criticalSuccessThreshold: number | null;
   criticalFailureThreshold: number | null;
   higherIsBetter: boolean;
