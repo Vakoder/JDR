@@ -111,6 +111,7 @@ export type CharacterType = 'PC' | 'NPC';
 export interface InventoryEntry {
   instanceId: string;
   itemId: string;
+  quantity: number;
   equipped: boolean;
 }
 

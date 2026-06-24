@@ -11,7 +11,6 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
-  BookOpen,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useRuleSetStore } from '../../store/ruleSetStore';
@@ -35,36 +34,103 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`flex flex-col bg-[#13151c] border-r border-[#2a2d3a] transition-all duration-200 ${collapsed ? 'w-16' : 'w-60'} min-h-screen`}
+      style={{
+        backgroundColor: '#171719',
+        borderRight: '1px solid #2e2e32',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        width: collapsed ? '60px' : '220px',
+        transition: 'width 0.2s ease',
+        flexShrink: 0,
+      }}
     >
-      {/* Logo / title */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-[#2a2d3a]">
-        <BookOpen size={22} className="text-violet-400 shrink-0" />
+      {/* Logo */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: collapsed ? '20px 0' : '20px 16px',
+          justifyContent: collapsed ? 'center' : 'flex-start',
+          borderBottom: '1px solid #2e2e32',
+        }}
+      >
+        {/* Logo */}
+        <img
+          src="/sword_logo.png"
+          alt="JDR Ruleset"
+          style={{ width: '34px', height: '34px', objectFit: 'contain', flexShrink: 0 }}
+        />
         {!collapsed && (
-          <div className="overflow-hidden">
-            <p className="text-sm font-bold text-white truncate">JDR Ruleset</p>
+          <div style={{ overflow: 'hidden' }}>
+            <p style={{
+              margin: 0,
+              fontSize: '15px',
+              fontFamily: "'Crimson Pro', Georgia, serif",
+              fontWeight: 600,
+              color: '#f0e6d3',
+              lineHeight: 1.2,
+              letterSpacing: '0.02em',
+            }}>
+              JDR Ruleset
+            </p>
             {ruleSet && (
-              <p className="text-xs text-slate-500 truncate">{ruleSet.name}</p>
+              <p style={{
+                margin: 0,
+                fontSize: '11px',
+                color: '#5a5a5e',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: '160px',
+              }}>
+                {ruleSet.name}
+              </p>
             )}
           </div>
         )}
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-4 space-y-1 px-2">
+      <nav style={{ flex: 1, padding: '10px 0', overflowY: 'auto' }}>
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-violet-600/20 text-violet-300 border border-violet-600/30'
-                  : 'text-slate-400 hover:bg-[#1e2130] hover:text-slate-200'
-              }`
-            }
+            style={({ isActive }) => ({
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: collapsed ? '10px 0' : '9px 14px',
+              justifyContent: collapsed ? 'center' : 'flex-start',
+              margin: '2px 8px',
+              borderRadius: '7px',
+              fontSize: '13px',
+              fontWeight: 500,
+              textDecoration: 'none',
+              transition: 'all 0.15s ease',
+              position: 'relative',
+              color: isActive ? '#e8a838' : '#7a7a80',
+              backgroundColor: isActive ? 'rgba(232,168,56,0.1)' : 'transparent',
+              borderLeft: isActive ? '2px solid #e8a838' : '2px solid transparent',
+            })}
+            onMouseEnter={(e) => {
+              const target = e.currentTarget;
+              if (!target.style.borderLeftColor.includes('232')) {
+                target.style.backgroundColor = '#222224';
+                target.style.color = '#c0b090';
+              }
+            }}
+            onMouseLeave={(e) => {
+              const target = e.currentTarget;
+              if (!target.style.borderLeftColor.includes('232')) {
+                target.style.backgroundColor = 'transparent';
+                target.style.color = '#7a7a80';
+              }
+            }}
           >
-            <Icon size={18} className="shrink-0" />
+            <Icon size={16} style={{ flexShrink: 0 }} />
             {!collapsed && <span>{label}</span>}
           </NavLink>
         ))}
@@ -73,9 +139,23 @@ export default function Sidebar() {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed((c) => !c)}
-        className="flex items-center justify-center py-3 border-t border-[#2a2d3a] text-slate-500 hover:text-slate-300 transition-colors"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '12px',
+          background: 'none',
+          border: 'none',
+          borderTop: '1px solid #2e2e32',
+          color: '#5a5a5e',
+          cursor: 'pointer',
+          transition: 'color 0.15s ease',
+          width: '100%',
+        }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#c0b090'; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#5a5a5e'; }}
       >
-        {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
       </button>
     </aside>
   );

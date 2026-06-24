@@ -81,7 +81,7 @@ export default function ExportPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {stats.map(({ label, value }) => (
               <div key={label} className="bg-[#0f1117] border border-[#2a2d3a] rounded-lg p-4 text-center">
-                <div className="text-3xl font-bold text-violet-400">{value}</div>
+                <div className="text-3xl font-bold text-amber-400">{value}</div>
                 <div className="text-sm text-slate-500 mt-1">{label}</div>
               </div>
             ))}

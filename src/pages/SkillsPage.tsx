@@ -108,7 +108,7 @@ export default function SkillsPage() {
                       <h3 className="font-semibold text-white leading-tight">{skill.name}</h3>
                     </div>
                     <div className="flex gap-1 shrink-0">
-                      <button onClick={() => openEdit(skill)} className="text-slate-500 hover:text-violet-400 p-1.5 rounded hover:bg-violet-600/10 transition-colors"><Pencil size={14} /></button>
+                      <button onClick={() => openEdit(skill)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={14} /></button>
                       <button onClick={() => setDeleteTarget(skill)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={14} /></button>
                     </div>
                   </div>
@@ -118,7 +118,7 @@ export default function SkillsPage() {
                     {linkedStat && <Badge color="blue">{linkedStat}</Badge>}
                     {skill.conditions.length > 0 && <Badge color="slate">{skill.conditions.length} cond.</Badge>}
                     {skill.allowedClassIds.length > 0 && (
-                      <Badge color="violet">{skill.allowedClassIds.length} classe{skill.allowedClassIds.length !== 1 ? 's' : ''}</Badge>
+                      <Badge color="amber">{skill.allowedClassIds.length} classe{skill.allowedClassIds.length !== 1 ? 's' : ''}</Badge>
                     )}
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export default function SkillsPage() {
         <div className="flex gap-1 mb-6 bg-[#0f1117] rounded-lg p-1 border border-[#2a2d3a]">
           {[{ key: 'info', label: 'Informations' }, { key: 'conditions', label: 'Conditions' }].map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key as any)}
-              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-violet-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
+              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-amber-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
               {tab.label}
             </button>
           ))}

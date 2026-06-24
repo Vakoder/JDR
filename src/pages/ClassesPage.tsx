@@ -96,7 +96,7 @@ export default function ClassesPage() {
                     <h3 className="font-semibold text-white">{cls.name}</h3>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(cls)} className="text-slate-500 hover:text-violet-400 p-1.5 rounded hover:bg-violet-600/10 transition-colors">
+                    <button onClick={() => openEdit(cls)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors">
                       <Pencil size={14} />
                     </button>
                     <button onClick={() => setDeleteTarget(cls)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors">
@@ -140,7 +140,7 @@ export default function ClassesPage() {
         <div className="flex gap-1 mb-6 bg-[#0f1117] rounded-lg p-1 border border-[#2a2d3a]">
           {tabs.map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-violet-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
+              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-amber-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
               {tab.label}
             </button>
           ))}

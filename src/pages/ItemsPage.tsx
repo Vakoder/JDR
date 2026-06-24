@@ -36,10 +36,10 @@ const ITEM_SLOTS: { value: ItemSlot; label: string }[] = [
   { value: 'RING', label: 'Anneau' },
 ];
 
-const TYPE_COLORS: Record<ItemType, 'violet' | 'blue' | 'green' | 'yellow' | 'slate'> = {
+const TYPE_COLORS: Record<ItemType, 'amber' | 'blue' | 'green' | 'yellow' | 'slate'> = {
   WEAPON: 'red' as any,
   ARMOR: 'blue',
-  ACCESSORY: 'violet',
+  ACCESSORY: 'amber',
   CONSUMABLE: 'green',
   MISC: 'slate',
 };
@@ -137,10 +137,11 @@ export default function ItemsPage() {
                 <button
                   key={type}
                   onClick={() => setFilterType(type as any)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${filterType === type
-                    ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
-                    : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
-                    }`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+                    filterType === type
+                      ? 'bg-amber-600/20 text-amber-300 border-amber-600/30'
+                      : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
+                  }`}
                 >
                   {type === 'ALL' ? 'Tous' : TYPE_LABELS[type as ItemType]}
                 </button>
@@ -184,14 +185,14 @@ export default function ItemsPage() {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex gap-1.5 flex-wrap">
-                        {item.equippable && <Badge color="violet">Équipable</Badge>}
+                        {item.equippable && <Badge color="amber">Équipable</Badge>}
                         {item.stackable && <Badge color="blue">Empilable</Badge>}
                         {item.statModifiers.length > 0 && <Badge color="green">{item.statModifiers.length} modificateur{item.statModifiers.length !== 1 ? 's' : ''}</Badge>}
                       </div>
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
-                        <button onClick={() => openEdit(item)} className="text-slate-500 hover:text-violet-400 p-1.5 rounded hover:bg-violet-600/10 transition-colors"><Pencil size={15} /></button>
+                        <button onClick={() => openEdit(item)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded hover:bg-amber-600/10 transition-colors"><Pencil size={15} /></button>
                         <button onClick={() => setDeleteTarget(item)} className="text-slate-500 hover:text-red-400 p-1.5 rounded hover:bg-red-600/10 transition-colors"><Trash2 size={15} /></button>
                       </div>
                     </td>
@@ -219,7 +220,7 @@ export default function ItemsPage() {
         <div className="flex gap-1 mb-6 bg-[#0f1117] rounded-lg p-1 border border-[#2a2d3a]">
           {tabs.map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-violet-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
+              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key ? 'bg-amber-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'}`}>
               {tab.label}
             </button>
           ))}
@@ -260,11 +261,11 @@ export default function ItemsPage() {
             </div>
             <div className="flex gap-6">
               <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
-                <input type="checkbox" checked={form.equippable} onChange={(e) => setField('equippable', e.target.checked)} className="accent-violet-500" />
+                <input type="checkbox" checked={form.equippable} onChange={(e) => setField('equippable', e.target.checked)} className="accent-amber-500" />
                 Équipable
               </label>
               <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
-                <input type="checkbox" checked={form.stackable} onChange={(e) => setField('stackable', e.target.checked)} className="accent-violet-500" />
+                <input type="checkbox" checked={form.stackable} onChange={(e) => setField('stackable', e.target.checked)} className="accent-amber-500" />
                 Empilable
               </label>
             </div>

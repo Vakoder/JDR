@@ -47,7 +47,7 @@ export default function StatModifiersEditor({ modifiers, stats, onChange }: Stat
               type="number"
               value={mod.modifier}
               onChange={(e) => update(i, 'modifier', parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 focus:outline-none focus:border-violet-500"
+              className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
             />
           </div>
           <button
