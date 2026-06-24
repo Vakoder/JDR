@@ -12,6 +12,7 @@ import SelectField from '../components/common/SelectField';
 import SearchBar from '../components/common/SearchBar';
 import EmptyState from '../components/common/EmptyState';
 import Badge from '../components/common/Badge';
+import evaluateConditions from '../services/conditionService.ts';
 
 const emptyForm = (): Omit<Character, 'id'> => ({
   name: '',
@@ -19,6 +20,7 @@ const emptyForm = (): Omit<Character, 'id'> => ({
   raceId: null,
   classId: null,
   stats: {},
+  statsMax: {},
   skillIds: [],
   inventory: [],
   description: '',
@@ -59,7 +61,7 @@ export default function CharactersPage() {
 
   const openEdit = (char: Character) => {
     setEditing(char);
-    setForm({ ...char });
+    setForm({ ...char, statsMax: char.statsMax ?? {}, inventory: char.inventory.map((e) => ({ ...e, quantity: e.quantity ?? 1 })) });
     setActiveTab('identity');
     setModalOpen(true);
   };
@@ -80,6 +82,9 @@ export default function CharactersPage() {
   const setStat = (statId: string, value: number) =>
     setForm((f) => ({ ...f, stats: { ...f.stats, [statId]: value } }));
 
+  const setStatMax = (statId: string, value: number) =>
+    setForm((f) => ({ ...f, statsMax: { ...f.statsMax, [statId]: value } }));
+
   const toggleSkill = (skillId: string) =>
     setForm((f) => ({
       ...f,
@@ -89,21 +94,34 @@ export default function CharactersPage() {
     }));
 
   const addInventoryItem = (itemId: string) => {
-    if (form.inventory.some((e) => e.itemId === itemId)) return;
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    if (item.stackable) {
+      const existing = form.inventory.find((e) => e.itemId === itemId);
+      if (existing) {
+        setForm((f) => ({
+          ...f,
+          inventory: f.inventory.map((e) =>
+            e.itemId === itemId ? { ...e, quantity: e.quantity + 1 } : e
+          ),
+        }));
+        return;
+      }
+    }
     setForm((f) => ({
       ...f,
-      inventory: [...f.inventory, { itemId, quantity: 1, equipped: false }],
+      inventory: [...f.inventory, { instanceId: crypto.randomUUID(), itemId, quantity: 1, equipped: false }],
     }));
   };
 
-  const updateInventoryEntry = (itemId: string, field: keyof InventoryEntry, value: unknown) =>
+  const updateInventoryEntry = (instanceId: string, field: keyof InventoryEntry, value: unknown) =>
     setForm((f) => ({
       ...f,
-      inventory: f.inventory.map((e) => (e.itemId === itemId ? { ...e, [field]: value } : e)),
+      inventory: f.inventory.map((e) => (e.instanceId === instanceId ? { ...e, [field]: value } : e)),
     }));
 
-  const removeInventoryItem = (itemId: string) =>
-    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.itemId !== itemId) }));
+  const removeInventoryItem = (instanceId: string) =>
+    setForm((f) => ({ ...f, inventory: f.inventory.filter((e) => e.instanceId !== instanceId) }));
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'identity', label: 'Identité' },
@@ -114,6 +132,14 @@ export default function CharactersPage() {
 
   const getRaceName = (id: string | null) => races.find((r) => r.id === id)?.name ?? '—';
   const getClassName = (id: string | null) => classes.find((c) => c.id === id)?.name ?? '—';
+
+  const currentCharacter: Character = {
+    ...(editing ?? {
+      id: 'temp',
+      type: 'PC',
+    }),
+    ...form,
+  };
 
   return (
     <div className="flex flex-col min-h-full">
@@ -140,11 +166,10 @@ export default function CharactersPage() {
                 <button
                   key={type}
                   onClick={() => setFilterType(type)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                    filterType === type
-                      ? 'bg-amber-600/20 text-amber-300 border-amber-600/30'
-                      : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${filterType === type
+                    ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
+                    : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
+                    }`}
                 >
                   {type === 'ALL' ? 'Tous' : type === 'PC' ? 'PJ' : 'PNJ'}
                 </button>
@@ -233,11 +258,10 @@ export default function CharactersPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 text-sm rounded-md transition-colors ${
-                activeTab === tab.key
-                  ? 'bg-amber-600 text-white font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key
+                ? 'bg-violet-600 text-white font-medium'
+                : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               {tab.label}
             </button>
@@ -267,14 +291,38 @@ export default function CharactersPage() {
                 label="Race"
                 value={form.raceId ?? ''}
                 placeholder="— Aucune race —"
-                options={races.map((r) => ({ value: r.id, label: r.name }))}
+                options={races.map(
+                  (r) => {
+                    const usable =
+                      r.conditions.length === 0 ||
+                      evaluateConditions(
+                        r.conditions,
+                        currentCharacter,
+                        r,
+                        ruleSet
+                      );
+                    return ({ value: r.id, label: r.name + (usable ? " ✓" : " ✗") });
+                  }
+                )}
                 onChange={(e) => setField('raceId', e.target.value || null)}
               />
               <SelectField
                 label="Classe"
                 value={form.classId ?? ''}
                 placeholder="— Aucune classe —"
-                options={classes.map((c) => ({ value: c.id, label: c.name }))}
+                options={classes.map(
+                  (c) => {
+                    const usable =
+                      c.conditions.length === 0 ||
+                      evaluateConditions(
+                        c.conditions,
+                        currentCharacter,
+                        c,
+                        ruleSet
+                      );
+                    return ({ value: c.id, label: c.name + (usable ? " ✓" : " ✗") });
+                  }
+                )}
                 onChange={(e) => setField('classId', e.target.value || null)}
               />
             </div>
@@ -310,15 +358,30 @@ export default function CharactersPage() {
                       {stat.name}
                       <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
                     </label>
-                    <input
-                      type="number"
-                      min={stat.minValue}
-                      max={stat.maxValue}
-                      value={form.stats[stat.id] ?? stat.defaultValue}
-                      onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                      className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
-                    />
-                    <p className="text-xs text-slate-600 mt-1">{stat.minValue} – {stat.maxValue}</p>
+                    {stat.maxValue !== undefined ? (
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          value={form.stats[stat.id] ?? stat.defaultValue}
+                          onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                        />
+                        <span className="text-slate-600 text-sm">/</span>
+                        <input
+                          type="number"
+                          value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
+                          onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-violet-500/50"
+                        />
+                      </div>
+                    ) : (
+                      <input
+                        type="number"
+                        value={form.stats[stat.id] ?? stat.defaultValue}
+                        onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                      />
+                    )}
                   </div>
                 ))}
               </div>
@@ -334,6 +397,14 @@ export default function CharactersPage() {
             ) : (
               skills.map((skill) => {
                 const linkedStat = stats.find((s) => s.id === skill.linkedStatId);
+                const usable =
+                  skill.conditions.length === 0 ||
+                  evaluateConditions(
+                    skill.conditions,
+                    currentCharacter,
+                    skill,
+                    ruleSet
+                  );
                 return (
                   <label
                     key={skill.id}
@@ -349,6 +420,12 @@ export default function CharactersPage() {
                       <p className="text-sm font-medium text-slate-200">{skill.name}</p>
                       <p className="text-xs text-slate-500">
                         {linkedStat ? `Lié à ${linkedStat.name}` : 'Aucune stat'} · {skill.cost} {skill.costType === 'CUSTOM' ? skill.costTypeCustomName : skill.costType}
+                      </p>
+                      <p
+                        className={`text-xs mt-1 ${usable ? 'text-green-400' : 'text-red-400'
+                          }`}
+                      >
+                        {usable ? '✓ Utilisable' : '✗ Conditions non remplies'}
                       </p>
                     </div>
                   </label>
@@ -366,7 +443,7 @@ export default function CharactersPage() {
               label="Ajouter un objet"
               value=""
               placeholder="— Sélectionner un objet —"
-              options={items.filter((it) => !form.inventory.some((e) => e.itemId === it.id)).map((it) => ({ value: it.id, label: it.name }))}
+              options={items.map((it) => ({ value: it.id, label: it.name }))}
               onChange={(e) => e.target.value && addInventoryItem(e.target.value)}
             />
             {/* Inventory list */}
@@ -377,31 +454,55 @@ export default function CharactersPage() {
                 {form.inventory.map((entry) => {
                   const item = items.find((it) => it.id === entry.itemId);
                   if (!item) return null;
+                  const usable =
+                    item.conditions.length === 0 ||
+                    evaluateConditions(
+                      item.conditions,
+                      currentCharacter,
+                      item,
+                      ruleSet
+                    );
+
+                  const sameInstances = form.inventory.filter((e) => e.itemId === item.id);
+                  const instanceLabel = !item.stackable && sameInstances.length > 1
+                    ? ` #${sameInstances.findIndex((e) => e.instanceId === entry.instanceId) + 1}`
+                    : '';
                   return (
-                    <div key={entry.itemId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
+                    <div key={entry.instanceId} className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg">
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-200">{item.name}</p>
+                        <p className="text-sm font-medium text-slate-200">
+                          {item.name}
+                          {instanceLabel && <span className="text-slate-500 font-normal">{instanceLabel}</span>}
+                        </p>
                         <p className="text-xs text-slate-500">{item.type} · {item.slot}</p>
                       </div>
-                      <input
-                        type="number"
-                        min={1}
-                        value={entry.quantity}
-                        onChange={(e) => updateInventoryEntry(entry.itemId, 'quantity', parseInt(e.target.value) || 1)}
-                        className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500 text-center"
-                      />
+                      {item.stackable && (
+                        <input
+                          type="number"
+                          min={1}
+                          value={entry.quantity}
+                          onChange={(e) => updateInventoryEntry(entry.instanceId, 'quantity', parseInt(e.target.value) || 1)}
+                          className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500 text-center"
+                        />
+                      )}
                       {item.equippable && (
                         <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={entry.equipped}
-                            onChange={(e) => updateInventoryEntry(entry.itemId, 'equipped', e.target.checked)}
-                            className="accent-amber-500"
+                            onChange={(e) => updateInventoryEntry(entry.instanceId, 'equipped', e.target.checked)}
+                            className="accent-violet-500"
                           />
                           Équipé
+                          <p
+                            className={`text-xs mt-1 ${usable ? 'text-green-400' : 'text-red-400'
+                              }`}
+                          >
+                            {usable ? '✓ Utilisable' : '✗ Conditions non remplies'}
+                          </p>
                         </label>
                       )}
-                      <button onClick={() => removeInventoryItem(entry.itemId)} className="text-slate-600 hover:text-red-400 transition-colors">
+                      <button onClick={() => removeInventoryItem(entry.instanceId)} className="text-slate-600 hover:text-red-400 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
