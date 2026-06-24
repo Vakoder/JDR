@@ -135,7 +135,7 @@ export interface Character {
 export interface MonetaryUnit {
   id: string,
   name: string;
-  base: number;
+  value: number;
 }
 
 // ─── RuleSet (root) ──────────────────────────────────────────────────────────
