@@ -139,8 +139,9 @@ export default function StatsPage() {
               label="Maximum"
               type="number"
               value={form.base}
+              min={0}
               placeholder="ex: 10"
-              onChange={(e) => setField('base', parseInt(e.target.value))}
+              onChange={(e) => {const val = Math.max(parseInt(e.target.value), 0); setField('base', val);}}
             />
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-[#2a2d3a] mt-2">
