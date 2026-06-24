@@ -16,6 +16,7 @@ const emptyForm = (): Omit<Stat, 'id'> => ({
   abbreviation: '',
   description: '',
   defaultValue: 10,
+  maxValue: undefined,
 });
 
 export default function StatsPage() {
@@ -41,7 +42,13 @@ export default function StatsPage() {
 
   const openEdit = (stat: Stat) => {
     setEditing(stat);
-    setForm({ name: stat.name, abbreviation: stat.abbreviation, description: stat.description, defaultValue: stat.defaultValue });
+    setForm({
+      name: stat.name,
+      abbreviation: stat.abbreviation,
+      description: stat.description,
+      defaultValue: stat.defaultValue,
+      maxValue: stat.maxValue,
+    });
     setModalOpen(true);
   };
 
