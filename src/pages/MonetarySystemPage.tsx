@@ -142,9 +142,9 @@ export default function StatsPage() {
               placeholder="ex: Argent"
               onChange={(e) => setField('name', e.target.value)}
             />
-            { currentMonetaryUnit.id != monetarySystem[0].id && (
+            { currentMonetaryUnit?.id != monetarySystem[0]?.id && (
               <FormField
-                label={"Valeur par rapport à '" + monetarySystem[0].name + "'"}
+                label={"Valeur par rapport à '" + monetarySystem[0]?.name + "'"}
                 type="number"
                 value={form.value}
                 min={0}
