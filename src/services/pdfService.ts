@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { RuleSet } from '../types';
 
-const ACCENT = [139, 92, 246] as [number, number, number]; // violet-500
+const ACCENT = [232, 168, 56] as [number, number, number]; // amber-500
 const BG_DARK = [19, 21, 28] as [number, number, number];
 const TEXT_LIGHT = [226, 232, 240] as [number, number, number];
 const TEXT_MUTED = [100, 116, 139] as [number, number, number];
@@ -62,7 +62,7 @@ export function exportToPDF(ruleSet: RuleSet): void {
       theme: 'grid',
       headStyles: { fillColor: ACCENT, textColor: [255, 255, 255], fontSize: 9 },
       bodyStyles: { fontSize: 9, textColor: [30, 30, 30] },
-      alternateRowStyles: { fillColor: [245, 245, 255] },
+      alternateRowStyles: { fillColor: [250, 245, 235] },
     });
   }
 

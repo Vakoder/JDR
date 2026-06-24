@@ -143,7 +143,6 @@ export default function Sidebar() {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '12px',
-          borderTop: '1px solid #2e2e32',
           background: 'none',
           border: 'none',
           borderTop: '1px solid #2e2e32',
