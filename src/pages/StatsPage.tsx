@@ -125,7 +125,7 @@ export default function StatsPage() {
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Défaut</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Max</th>
                   {selectedChar && (
-                    <th className="text-left px-5 py-3 text-xs font-semibold text-violet-400 uppercase tracking-wider">
+                    <th className="text-left px-5 py-3 text-xs font-semibold text-amber-400 uppercase tracking-wider">
                       {selectedChar.name}
                     </th>
                   )}
@@ -247,14 +247,14 @@ export default function StatsPage() {
                   id="hasMax"
                   checked={form.maxValue !== undefined}
                   onChange={(e) => setField('maxValue', e.target.checked ? 100 : undefined)}
-                  className="w-4 h-4 accent-violet-500 cursor-pointer"
+                  className="w-4 h-4 accent-amber-500 cursor-pointer"
                 />
                 {form.maxValue !== undefined && (
                   <input
                     type="number"
                     value={form.maxValue}
                     onChange={(e) => setField('maxValue', Number(e.target.value))}
-                    className="flex-1 px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                    className="flex-1 px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
                   />
                 )}
               </div>

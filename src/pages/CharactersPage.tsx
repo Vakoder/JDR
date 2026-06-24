@@ -177,7 +177,7 @@ export default function CharactersPage() {
                   key={type}
                   onClick={() => setFilterType(type)}
                   className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${filterType === type
-                    ? 'bg-violet-600/20 text-violet-300 border-violet-600/30'
+                    ? 'bg-amber-600/20 text-amber-300 border-amber-600/30'
                     : 'text-slate-400 border-[#2a2d3a] hover:border-slate-500'
                     }`}
                 >
@@ -269,7 +269,7 @@ export default function CharactersPage() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-2 text-sm rounded-md transition-colors ${activeTab === tab.key
-                ? 'bg-violet-600 text-white font-medium'
+                ? 'bg-amber-600 text-white font-medium'
                 : 'text-slate-400 hover:text-slate-200'
                 }`}
             >
@@ -396,14 +396,14 @@ export default function CharactersPage() {
                           type="number"
                           value={form.stats[stat.id] ?? stat.defaultValue}
                           onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
                         />
                         <span className="text-slate-600 text-sm">/</span>
                         <input
                           type="number"
                           value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
                           onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
-                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-violet-500/50"
+                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-amber-500/50"
                         />
                       </div>
                     ) : (
@@ -411,7 +411,7 @@ export default function CharactersPage() {
                         type="number"
                         value={form.stats[stat.id] ?? stat.defaultValue}
                         onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500"
+                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
                       />
                     )}
                   </div>
@@ -514,7 +514,7 @@ export default function CharactersPage() {
                           min={1}
                           value={entry.quantity}
                           onChange={(e) => updateInventoryEntry(entry.instanceId, 'quantity', parseInt(e.target.value) || 1)}
-                          className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-violet-500 text-center"
+                          className="w-16 px-2 py-1 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500 text-center"
                         />
                       )}
                       {item.equippable && (
@@ -523,7 +523,7 @@ export default function CharactersPage() {
                             type="checkbox"
                             checked={entry.equipped}
                             onChange={(e) => updateInventoryEntry(entry.instanceId, 'equipped', e.target.checked)}
-                            className="accent-violet-500"
+                            className="accent-amber-500"
                           />
                           Équipé
                           <p
