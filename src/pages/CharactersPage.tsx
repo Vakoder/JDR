@@ -61,7 +61,7 @@ export default function CharactersPage() {
 
   const openEdit = (char: Character) => {
     setEditing(char);
-    setForm({ ...char });
+    setForm({ ...char, statsMax: char.statsMax ?? {}, inventory: char.inventory.map((e) => ({ ...e, quantity: e.quantity ?? 1 })) });
     setActiveTab('identity');
     setModalOpen(true);
   };
@@ -369,7 +369,7 @@ export default function CharactersPage() {
                         <span className="text-slate-600 text-sm">/</span>
                         <input
                           type="number"
-                          value={form.statsMax[stat.id] ?? stat.maxValue}
+                          value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
                           onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
                           className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-violet-500/50"
                         />
