@@ -95,8 +95,8 @@ export default function CharactersPage() {
   const setStatMax = (statId: string, value: number) =>
     setForm((f) => ({ ...f, statsMax: { ...f.statsMax, [statId]: value } }));
 
-  const getEquippedModifier = (statId: string) =>
-    form.inventory
+  const getEquippedModifier = (statId: string) => {
+    const itemBonus = form.inventory
       .filter((e) => e.equipped)
       .reduce((sum, entry) => {
         const item = items.find((it) => it.id === entry.itemId);
@@ -105,6 +105,19 @@ export default function CharactersPage() {
           .filter((m) => m.statId === statId)
           .reduce((s, m) => s + m.modifier, 0);
       }, 0);
+
+    const race = races.find((r) => r.id === form.raceId);
+    const raceBonus = race
+      ? race.statModifiers.filter((m) => m.statId === statId).reduce((s, m) => s + m.modifier, 0)
+      : 0;
+
+    const cls = classes.find((c) => c.id === form.classId);
+    const classBonus = cls
+      ? cls.statModifiers.filter((m) => m.statId === statId).reduce((s, m) => s + m.modifier, 0)
+      : 0;
+
+    return itemBonus + raceBonus + classBonus;
+  };
 
   const toggleSkill = (skillId: string) =>
     setForm((f) => ({
