@@ -95,6 +95,17 @@ export default function CharactersPage() {
   const setStatMax = (statId: string, value: number) =>
     setForm((f) => ({ ...f, statsMax: { ...f.statsMax, [statId]: value } }));
 
+  const getEquippedModifier = (statId: string) =>
+    form.inventory
+      .filter((e) => e.equipped)
+      .reduce((sum, entry) => {
+        const item = items.find((it) => it.id === entry.itemId);
+        if (!item) return sum;
+        return sum + item.statModifiers
+          .filter((m) => m.statId === statId)
+          .reduce((s, m) => s + m.modifier, 0);
+      }, 0);
+
   const toggleSkill = (skillId: string) =>
     setForm((f) => ({
       ...f,
@@ -384,38 +395,53 @@ export default function CharactersPage() {
               <p className="text-slate-500 text-sm text-center py-8">Créez d'abord des statistiques dans la section "Statistiques".</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {stats.map((stat) => (
-                  <div key={stat.id} className="bg-[#1a1d28] border border-[#2a2d3a] rounded-lg p-3">
-                    <label className="text-xs text-slate-400 font-medium block mb-1.5">
-                      {stat.name}
-                      <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
-                    </label>
-                    {stat.maxValue !== undefined ? (
-                      <div className="flex items-center gap-1.5">
+                {stats.map((stat) => {
+                  const modifier = getEquippedModifier(stat.id);
+                  const base = form.stats[stat.id] ?? stat.defaultValue;
+                  const effective = base + modifier;
+                  return (
+                    <div key={stat.id} className="bg-[#1a1d28] border border-[#2a2d3a] rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs text-slate-400 font-medium">
+                          {stat.name}
+                          <span className="text-slate-600 ml-1">({stat.abbreviation})</span>
+                        </label>
+                        {modifier !== 0 && (
+                          <span className="text-xs font-mono font-semibold text-white">
+                            {effective}
+                            <span className={modifier > 0 ? 'text-green-400' : 'text-red-400'}>
+                              {' '}({modifier > 0 ? '+' : ''}{modifier})
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                      {stat.maxValue !== undefined ? (
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="number"
+                            value={base}
+                            onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
+                            className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
+                          />
+                          <span className="text-slate-600 text-sm">/</span>
+                          <input
+                            type="number"
+                            value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
+                            onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
+                            className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-amber-500/50"
+                          />
+                        </div>
+                      ) : (
                         <input
                           type="number"
-                          value={form.stats[stat.id] ?? stat.defaultValue}
+                          value={base}
                           onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
                           className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
                         />
-                        <span className="text-slate-600 text-sm">/</span>
-                        <input
-                          type="number"
-                          value={(form.statsMax ?? {})[stat.id] ?? stat.maxValue}
-                          onChange={(e) => setStatMax(stat.id, parseInt(e.target.value) || stat.maxValue!)}
-                          className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-500 focus:outline-none focus:border-amber-500/50"
-                        />
-                      </div>
-                    ) : (
-                      <input
-                        type="number"
-                        value={form.stats[stat.id] ?? stat.defaultValue}
-                        onChange={(e) => setStat(stat.id, parseInt(e.target.value) || stat.defaultValue)}
-                        className="w-full px-3 py-1.5 text-sm bg-[#13151c] border border-[#2a2d3a] rounded text-slate-200 focus:outline-none focus:border-amber-500"
-                      />
-                    )}
-                  </div>
-                ))}
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

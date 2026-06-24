@@ -10,7 +10,6 @@ import ConfirmDialog from '../components/common/ConfirmDialog';
 import FormField from '../components/common/FormField';
 import SearchBar from '../components/common/SearchBar';
 import EmptyState from '../components/common/EmptyState';
-import SelectField from '../components/common/SelectField';
 
 const emptyForm = (): Omit<Stat, 'id'> => ({
   name: '',
@@ -22,32 +21,11 @@ const emptyForm = (): Omit<Stat, 'id'> => ({
 export default function StatsPage() {
   const { ruleSet, addStat, updateStat, deleteStat } = useRuleSetStore();
   const stats = ruleSet?.stats ?? [];
-  const characters = ruleSet?.characters ?? [];
-  const items = ruleSet?.items ?? [];
-
   const [search, setSearch] = useState('');
-  const [selectedCharId, setSelectedCharId] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Stat | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<Stat | null>(null);
-
-  const selectedChar = characters.find((c) => c.id === selectedCharId) ?? null;
-
-  const getEffectiveValue = (stat: Stat): { base: number; modifier: number } | null => {
-    if (!selectedChar) return null;
-    const base = selectedChar.stats[stat.id] ?? stat.defaultValue;
-    const modifier = selectedChar.inventory
-      .filter((e) => e.equipped)
-      .reduce((sum, entry) => {
-        const item = items.find((it) => it.id === entry.itemId);
-        if (!item) return sum;
-        return sum + item.statModifiers
-          .filter((m) => m.statId === stat.id)
-          .reduce((s, m) => s + m.modifier, 0);
-      }, 0);
-    return { base, modifier };
-  };
 
   const filtered = stats.filter(
     (s) =>
@@ -94,23 +72,10 @@ export default function StatsPage() {
           }
         />
 
-        {/* Search + character selector */}
+        {/* Search */}
         {stats.length > 0 && (
-          <div className="mb-6 flex gap-4 flex-wrap">
-            <div className="max-w-sm flex-1">
-              <SearchBar value={search} onChange={setSearch} placeholder="Rechercher une statistique…" />
-            </div>
-            {characters.length > 0 && (
-              <div className="w-56">
-                <SelectField
-                  label=""
-                  value={selectedCharId}
-                  placeholder="— Personnage —"
-                  options={characters.map((c) => ({ value: c.id, label: c.name }))}
-                  onChange={(e) => setSelectedCharId(e.target.value)}
-                />
-              </div>
-            )}
+          <div className="mb-6 max-w-sm">
+            <SearchBar value={search} onChange={setSearch} placeholder="Rechercher une statistique…" />
           </div>
         )}
 
@@ -124,11 +89,6 @@ export default function StatsPage() {
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Abrév.</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Défaut</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Max</th>
-                  {selectedChar && (
-                    <th className="text-left px-5 py-3 text-xs font-semibold text-amber-400 uppercase tracking-wider">
-                      {selectedChar.name}
-                    </th>
-                  )}
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
                   <th className="px-5 py-3" />
                 </tr>
@@ -147,21 +107,6 @@ export default function StatsPage() {
                     </td>
                     <td className="px-5 py-3 text-slate-400">{stat.defaultValue}</td>
                     <td className="px-5 py-3 text-slate-400">{stat.maxValue ?? '—'}</td>
-                    {selectedChar && (() => {
-                      const eff = getEffectiveValue(stat);
-                      if (!eff) return <td className="px-5 py-3">—</td>;
-                      const total = eff.base + eff.modifier;
-                      return (
-                        <td className="px-5 py-3">
-                          <span className="font-semibold text-white">{total}</span>
-                          {eff.modifier !== 0 && (
-                            <span className={`ml-1.5 text-xs font-mono ${eff.modifier > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                              ({eff.modifier > 0 ? '+' : ''}{eff.modifier})
-                            </span>
-                          )}
-                        </td>
-                      );
-                    })()}
                     <td className="px-5 py-3 text-slate-500 max-w-xs truncate">{stat.description || '—'}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
