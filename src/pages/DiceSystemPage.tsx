@@ -136,7 +136,7 @@ export default function DiceSystemPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <FormField
                 label={ds.higherIsBetter ? 'Seuil de réussite (≥)' : 'Seuil de réussite (≤)'}
                 type="number"
@@ -144,14 +144,6 @@ export default function DiceSystemPage() {
                 max={diceInfo.max * ds.numberOfDice}
                 value={ds.successThreshold}
                 onChange={(e) => handleChange('successThreshold', parseInt(e.target.value) || 1)}
-              />
-              <FormField
-                label={ds.higherIsBetter ? "Seuil d'échec (≤)" : "Seuil d'échec (≥)"}
-                type="number"
-                min={1}
-                max={diceInfo.max * ds.numberOfDice}
-                value={ds.failureThreshold}
-                onChange={(e) => handleChange('failureThreshold', parseInt(e.target.value) || 1)}
               />
             </div>
 
@@ -207,7 +199,6 @@ export default function DiceSystemPage() {
               <div className="bg-[#0f1117] border border-[#2a2d3a] rounded-lg p-4 mb-4 text-sm text-slate-400 space-y-1">
                 <p>Lancer: <span className="text-amber-300 font-medium">{ds.numberOfDice}{ds.diceType}</span></p>
                 <p>Réussite {ds.higherIsBetter ? '≥' : '≤'} <span className="text-emerald-300 font-medium">{ds.successThreshold}</span></p>
-                <p>Échec {ds.higherIsBetter ? '≤' : '≥'} <span className="text-red-300 font-medium">{ds.failureThreshold}</span></p>
                 {ds.criticalSuccessThreshold !== null && (
                   <p>Critique ✦ {ds.higherIsBetter ? '≥' : '≤'} <span className="text-yellow-300 font-medium">{ds.criticalSuccessThreshold}</span></p>
                 )}
