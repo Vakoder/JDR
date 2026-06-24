@@ -21,12 +21,29 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Modal open={open} onClose={onClose} title={title} size="sm">
-      <div className="flex flex-col items-center gap-4 text-center">
-        <div className="w-12 h-12 rounded-full bg-red-600/20 flex items-center justify-center">
-          <AlertTriangle size={22} className="text-red-400" />
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '16px',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          width: '48px',
+          height: '48px',
+          borderRadius: '50%',
+          backgroundColor: 'rgba(192,57,43,0.12)',
+          border: '1px solid rgba(192,57,43,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <AlertTriangle size={20} color="#e06050" />
         </div>
-        <p className="text-slate-400 text-sm">{message}</p>
-        <div className="flex gap-3 w-full justify-center">
+        <p style={{ margin: 0, fontSize: '13px', color: '#7a7a80', lineHeight: 1.6 }}>
+          {message}
+        </p>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
           <Button variant="secondary" onClick={onClose}>Annuler</Button>
           <Button variant="danger" onClick={() => { onConfirm(); onClose(); }}>{confirmLabel}</Button>
         </div>

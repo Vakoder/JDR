@@ -141,7 +141,7 @@ export default function StatsPage() {
                   >
                     <td className="px-5 py-3 font-medium text-white">{stat.name}</td>
                     <td className="px-5 py-3">
-                      <span className="px-2 py-0.5 bg-violet-600/20 text-violet-300 rounded text-xs font-mono font-bold">
+                      <span className="px-2 py-0.5 bg-amber-600/20 text-amber-300 rounded text-xs font-mono font-bold">
                         {stat.abbreviation}
                       </span>
                     </td>
@@ -167,7 +167,7 @@ export default function StatsPage() {
                       <div className="flex items-center gap-2 justify-end">
                         <button
                           onClick={() => openEdit(stat)}
-                          className="text-slate-500 hover:text-violet-400 transition-colors p-1.5 rounded hover:bg-violet-600/10"
+                          className="text-slate-500 hover:text-amber-400 transition-colors p-1.5 rounded hover:bg-amber-600/10"
                         >
                           <Pencil size={15} />
                         </button>

@@ -188,18 +188,18 @@ export default function CharactersPage() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${char.type === 'PC' ? 'bg-violet-600/20' : 'bg-blue-600/20'}`}>
-                      {char.type === 'PC' ? <User size={18} className="text-violet-400" /> : <UserCog size={18} className="text-blue-400" />}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${char.type === 'PC' ? 'bg-amber-600/20' : 'bg-blue-600/20'}`}>
+                      {char.type === 'PC' ? <User size={18} className="text-amber-400" /> : <UserCog size={18} className="text-blue-400" />}
                     </div>
                     <div>
                       <p className="font-semibold text-white">{char.name}</p>
                       <div className="flex gap-1.5 mt-0.5">
-                        <Badge color={char.type === 'PC' ? 'violet' : 'blue'}>{char.type === 'PC' ? 'PJ' : 'PNJ'}</Badge>
+                        <Badge color={char.type === 'PC' ? 'amber' : 'blue'}>{char.type === 'PC' ? 'PJ' : 'PNJ'}</Badge>
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-1 shrink-0">
-                    <button onClick={() => openEdit(char)} className="text-slate-500 hover:text-violet-400 p-1.5 rounded transition-colors hover:bg-violet-600/10">
+                    <button onClick={() => openEdit(char)} className="text-slate-500 hover:text-amber-400 p-1.5 rounded transition-colors hover:bg-amber-600/10">
                       <Pencil size={14} />
                     </button>
                     <button onClick={() => setDeleteTarget(char)} className="text-slate-500 hover:text-red-400 p-1.5 rounded transition-colors hover:bg-red-600/10">
@@ -408,13 +408,13 @@ export default function CharactersPage() {
                 return (
                   <label
                     key={skill.id}
-                    className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg cursor-pointer hover:border-violet-500/30 transition-colors"
+                    className="flex items-center gap-3 p-3 bg-[#1a1d28] border border-[#2a2d3a] rounded-lg cursor-pointer hover:border-amber-500/30 transition-colors"
                   >
                     <input
                       type="checkbox"
                       checked={form.skillIds.includes(skill.id)}
                       onChange={() => toggleSkill(skill.id)}
-                      className="accent-violet-500"
+                      className="accent-amber-500"
                     />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-slate-200">{skill.name}</p>

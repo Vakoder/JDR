@@ -85,7 +85,7 @@ export default function DiceSystemPage() {
           {/* Config panel */}
           <div className="bg-[#13151c] border border-[#2a2d3a] rounded-xl p-6 flex flex-col gap-5">
             <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Dice6 size={20} className="text-violet-400" />
+              <Dice6 size={20} className="text-amber-400" />
               Configuration
             </h3>
 
@@ -99,8 +99,8 @@ export default function DiceSystemPage() {
                     onClick={() => handleChange('diceType', d.value)}
                     className={`py-3 rounded-lg border text-sm font-bold transition-all ${
                       ds.diceType === d.value
-                        ? 'bg-violet-600 border-violet-500 text-white scale-105 shadow-lg shadow-violet-900/30'
-                        : 'bg-[#1e2130] border-[#2a2d3a] text-slate-400 hover:border-violet-500/50 hover:text-slate-200'
+                        ? 'bg-amber-600 border-amber-500 text-white scale-105 shadow-lg shadow-amber-900/30'
+                        : 'bg-[#1e2130] border-[#2a2d3a] text-slate-400 hover:border-amber-500/50 hover:text-slate-200'
                     }`}
                   >
                     {d.label}
@@ -123,13 +123,13 @@ export default function DiceSystemPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleChange('higherIsBetter', true)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${ds.higherIsBetter ? 'bg-violet-600/20 border-violet-600/30 text-violet-300' : 'border-[#2a2d3a] text-slate-400 hover:border-slate-500'}`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${ds.higherIsBetter ? 'bg-amber-600/20 border-amber-600/30 text-amber-300' : 'border-[#2a2d3a] text-slate-400 hover:border-slate-500'}`}
                 >
                   Plus haut = mieux
                 </button>
                 <button
                   onClick={() => handleChange('higherIsBetter', false)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${!ds.higherIsBetter ? 'bg-violet-600/20 border-violet-600/30 text-violet-300' : 'border-[#2a2d3a] text-slate-400 hover:border-slate-500'}`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${!ds.higherIsBetter ? 'bg-amber-600/20 border-amber-600/30 text-amber-300' : 'border-[#2a2d3a] text-slate-400 hover:border-slate-500'}`}
                 >
                   Plus bas = mieux
                 </button>
@@ -165,7 +165,7 @@ export default function DiceSystemPage() {
                   min={1}
                   max={diceInfo.max * ds.numberOfDice}
                   onChange={(e) => handleChange('criticalSuccessThreshold', e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -177,7 +177,7 @@ export default function DiceSystemPage() {
                   min={1}
                   max={diceInfo.max * ds.numberOfDice}
                   onChange={(e) => handleChange('criticalFailureThreshold', e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ export default function DiceSystemPage() {
                 placeholder="Décrivez votre système de résolution…"
                 rows={3}
                 onChange={(e) => handleChange('description', e.target.value)}
-                className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500 resize-none"
+                className="w-full px-3 py-2 text-sm bg-[#1e2130] border border-[#2a2d3a] rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 resize-none"
               />
             </div>
 
@@ -205,7 +205,7 @@ export default function DiceSystemPage() {
 
               {/* Summary */}
               <div className="bg-[#0f1117] border border-[#2a2d3a] rounded-lg p-4 mb-4 text-sm text-slate-400 space-y-1">
-                <p>Lancer: <span className="text-violet-300 font-medium">{ds.numberOfDice}{ds.diceType}</span></p>
+                <p>Lancer: <span className="text-amber-300 font-medium">{ds.numberOfDice}{ds.diceType}</span></p>
                 <p>Réussite {ds.higherIsBetter ? '≥' : '≤'} <span className="text-emerald-300 font-medium">{ds.successThreshold}</span></p>
                 <p>Échec {ds.higherIsBetter ? '≤' : '≥'} <span className="text-red-300 font-medium">{ds.failureThreshold}</span></p>
                 {ds.criticalSuccessThreshold !== null && (

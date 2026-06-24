@@ -9,13 +9,45 @@ interface EmptyStateProps {
 
 export default function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-      <div className="w-14 h-14 rounded-full bg-[#1e2130] border border-[#2a2d3a] flex items-center justify-center text-slate-500">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '64px 24px',
+      gap: '16px',
+      textAlign: 'center',
+    }}>
+      <div style={{
+        width: '52px',
+        height: '52px',
+        borderRadius: '50%',
+        backgroundColor: '#222224',
+        border: '1px solid #2e2e32',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#5a5a5e',
+      }}>
         {icon}
       </div>
       <div>
-        <p className="text-slate-300 font-medium">{title}</p>
-        <p className="text-slate-500 text-sm mt-1">{description}</p>
+        <p style={{
+          margin: 0,
+          fontSize: '16px',
+          fontFamily: "'Crimson Pro', Georgia, serif",
+          fontWeight: 600,
+          color: '#c0b090',
+        }}>
+          {title}
+        </p>
+        <p style={{
+          margin: '4px 0 0',
+          fontSize: '13px',
+          color: '#5a5a5e',
+        }}>
+          {description}
+        </p>
       </div>
       {action}
     </div>
