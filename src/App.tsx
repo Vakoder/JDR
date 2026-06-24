@@ -4,6 +4,7 @@ import ProtectedRoute from './components/layout/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import StatsPage from './pages/StatsPage';
+import MonetarySystemPage from './pages/MonetarySystemPage';
 import CharactersPage from './pages/CharactersPage';
 import RacesPage from './pages/RacesPage';
 import ClassesPage from './pages/ClassesPage';
@@ -26,6 +27,7 @@ export default function App() {
         >
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/monetary" element={<MonetarySystemPage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/races" element={<RacesPage />} />
           <Route path="/classes" element={<ClassesPage />} />

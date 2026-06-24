@@ -9,6 +9,7 @@ import type {
   Item,
   Skill,
   DiceSystem,
+  MonetaryUnit,
 } from '../types';
 import { createEmptyRuleSet } from '../utils/defaults';
 
@@ -23,6 +24,10 @@ interface RuleSetStore {
   addStat: (stat: Omit<Stat, 'id'>) => void;
   updateStat: (id: string, fields: Partial<Omit<Stat, 'id'>>) => void;
   deleteStat: (id: string) => void;
+  // Monetary System
+  addMonetaryUnit: (stat: Omit<MonetaryUnit, 'id'>) => void;
+  updateMonetaryUnit: (id: string, fields: Partial<Omit<MonetaryUnit, 'id'>>) => void;
+  deleteMonetaryUnit: (id: string) => void;
   // Races
   addRace: (race: Omit<Race, 'id'>) => void;
   updateRace: (id: string, fields: Partial<Omit<Race, 'id'>>) => void;
@@ -70,6 +75,21 @@ export const useRuleSetStore = create<RuleSetStore>((set) => ({
   deleteStat: (id) =>
     set((s) => s.ruleSet
       ? { ruleSet: touch({ ...s.ruleSet, stats: s.ruleSet.stats.filter((x) => x.id !== id) }) }
+      : s),
+
+  // ── Monetary System ──────────────────────────────────────────────────────────────────
+
+  addMonetaryUnit: (monetaryUnit) =>
+    set((s) => s.ruleSet
+      ? { ruleSet: touch({ ...s.ruleSet, monetarySystem: [...s.ruleSet.monetarySystem, { id: uuidv4(), ...monetaryUnit}] }) }
+      : s),
+  updateMonetaryUnit: (id, monetaryUnit) =>
+    set((s) => s.ruleSet
+      ? { ruleSet: touch({ ...s.ruleSet, monetarySystem: s.ruleSet.monetarySystem.map((x) => x.id === id ? { ...x, ...monetaryUnit } : x) }) }
+      : s),
+  deleteMonetaryUnit: (id) =>
+    set((s) => s.ruleSet
+      ? { ruleSet: touch({ ...s.ruleSet, monetarySystem: s.ruleSet.monetarySystem.filter((x) => x.id !== id) }) }
       : s),
 
   // ── Races ──────────────────────────────────────────────────────────────────
