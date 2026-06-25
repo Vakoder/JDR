@@ -66,6 +66,25 @@ export function exportToPDF(ruleSet: RuleSet): void {
     });
   }
 
+  // ── Monetary System ─────────────────────────────────────────────────────────────────
+  if (ruleSet.monetarySystem.length > 0) {
+    doc.addPage();
+    let y = 20;
+    y = addSection(doc, 'Système Monétaire', y);
+    autoTable(doc, {
+      startY: y,
+      head: [['Nom', ("Valeur par rapport à '" + ruleSet.monetarySystem[0].name + "'")]],
+      body: ruleSet.monetarySystem.map((monetaryUnit, i) => [
+        monetaryUnit.name,
+        i === 0 ? '—' : monetaryUnit.value,
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: ACCENT, textColor: [255, 255, 255], fontSize: 9 },
+      bodyStyles: { fontSize: 8, textColor: [30, 30, 30] },
+      columnStyles: { 5: { cellWidth: 60 } },
+    });
+  }
+
   // ── Races ─────────────────────────────────────────────────────────────────
   if (ruleSet.races.length > 0) {
     doc.addPage();
@@ -153,7 +172,9 @@ export function exportToPDF(ruleSet: RuleSet): void {
         item.type,
         item.slot,
         `${item.weight} kg`,
-        `${item.value} po`,
+        item.value.map((i) => {
+          return i.value + " " + (ruleSet.monetarySystem.find(x => x.id === i.id)?.name ?? "");
+        }),
         item.description || '—',
       ]),
       theme: 'grid',
@@ -226,7 +247,6 @@ export function exportToPDF(ruleSet: RuleSet): void {
   doc.setTextColor(50, 50, 50);
   doc.text(`Dé utilisé: ${ds.numberOfDice}${ds.diceType}`, 14, y + 5); y += 10;
   doc.text(`Seuil de réussite: ${ds.successThreshold}${ds.higherIsBetter ? ' (plus haut = mieux)' : ' (plus bas = mieux)'}`, 14, y); y += 7;
-  doc.text(`Seuil d'échec: ${ds.failureThreshold}`, 14, y); y += 7;
   if (ds.criticalSuccessThreshold !== null) { doc.text(`Réussite critique: ${ds.criticalSuccessThreshold}`, 14, y); y += 7; }
   if (ds.criticalFailureThreshold !== null) { doc.text(`Échec critique: ${ds.criticalFailureThreshold}`, 14, y); y += 7; }
   if (ds.description) {
