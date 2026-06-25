@@ -74,7 +74,7 @@ export class ConditionEvaluator {
 
             if (statDefinition) {
                 variables[`Character_${statName}Max`] =
-                    statDefinition.maxValue;
+                    character.statsMax[statId] ?? Number.POSITIVE_INFINITY;
             }
         }
 
