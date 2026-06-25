@@ -5,6 +5,7 @@ import type { RuleSet } from '../types';
 const ACCENT = [232, 168, 56] as [number, number, number]; // amber-500
 const BG_DARK = [19, 21, 28] as [number, number, number];
 const TEXT_LIGHT = [226, 232, 240] as [number, number, number];
+const TEXT_DARK = [60, 60, 60] as [number, number, number];
 const TEXT_MUTED = [100, 116, 139] as [number, number, number];
 
 function addSection(doc: jsPDF, title: string, y: number): number {
@@ -122,6 +123,15 @@ export function exportToPDF(ruleSet: RuleSet): void {
         doc.text(lines, 14, y);
         y += lines.length * 5 + 5;
       }
+      if (race.conditions.length > 0) {
+        const conditions = race.conditions.map((condition) => {
+          return condition.forumla;
+        });
+        doc.setFontSize(9);
+        doc.setTextColor(...ACCENT);
+        doc.text(`Conditions: ${conditions.join(', ')}`, 14, y);
+        y += 7;
+      }
       y += 5;
       if (y > 260) { doc.addPage(); y = 20; }
     }
@@ -154,6 +164,15 @@ export function exportToPDF(ruleSet: RuleSet): void {
         doc.text(lines, 14, y);
         y += lines.length * 5;
       }
+      if (cls.conditions.length > 0) {
+        const conditions = cls.conditions.map((condition) => {
+          return condition.forumla;
+        });
+        doc.setFontSize(9);
+        doc.setTextColor(...ACCENT);
+        doc.text(`Conditions: ${conditions.join(', ')}`, 14, y);
+        y += 7;
+      }
       y += 6;
       if (y > 260) { doc.addPage(); y = 20; }
     }
@@ -176,6 +195,9 @@ export function exportToPDF(ruleSet: RuleSet): void {
           return i.value + " " + (ruleSet.monetarySystem.find(x => x.id === i.id)?.name ?? "");
         }),
         item.description || '—',
+        item.conditions.map((condition, i) => {
+          return condition.forumla + (i === item.conditions.length - 1 ? "" : ", ");
+        }),
       ]),
       theme: 'grid',
       headStyles: { fillColor: ACCENT, textColor: [255, 255, 255], fontSize: 9 },
@@ -195,7 +217,15 @@ export function exportToPDF(ruleSet: RuleSet): void {
       body: ruleSet.skills.map((skill) => {
         const stat = ruleSet.stats.find((s) => s.id === skill.linkedStatId);
         const costLabel = skill.costType === 'CUSTOM' ? skill.costTypeCustomName : skill.costType;
-        return [skill.name, stat?.name ?? '—', `${skill.cost} ${costLabel}`, skill.description || '—'];
+        return [
+          skill.name,
+          stat?.name ?? '—',
+          `${skill.cost} ${costLabel}`,
+          skill.description || '—',
+          skill.conditions.map((condition, i) => {
+            return condition.forumla + (i === skill.conditions.length - 1 ? "" : ", ");
+          }),
+        ];
       }),
       theme: 'grid',
       headStyles: { fillColor: ACCENT, textColor: [255, 255, 255], fontSize: 9 },
@@ -257,8 +287,6 @@ export function exportToPDF(ruleSet: RuleSet): void {
 
   // ── Blank character sheet ─────────────────────────────────────────────────
   doc.addPage();
-  doc.setFillColor(...BG_DARK);
-  doc.rect(0, 0, pageW, 297, 'F');
   doc.setFillColor(...ACCENT);
   doc.rect(0, 0, pageW, 12, 'F');
   doc.setTextColor(255, 255, 255);
@@ -266,7 +294,7 @@ export function exportToPDF(ruleSet: RuleSet): void {
   doc.setFont('helvetica', 'bold');
   doc.text('FICHE DE PERSONNAGE', pageW / 2, 8, { align: 'center' });
 
-  doc.setTextColor(...TEXT_LIGHT);
+  doc.setTextColor(...TEXT_DARK);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
 
@@ -292,7 +320,7 @@ export function exportToPDF(ruleSet: RuleSet): void {
     doc.text(`${stat.abbreviation}:`, x, yPos);
     doc.setDrawColor(...TEXT_MUTED);
     doc.line(x + 12, yPos, x + 40, yPos);
-    doc.setTextColor(...TEXT_LIGHT);
+    doc.setTextColor(...TEXT_DARK);
     doc.setFontSize(7);
     doc.setFontSize(9);
   });
